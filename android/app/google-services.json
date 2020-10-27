@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "432735580980",
+    "firebase_url": "https://amikoj-60aa0.firebaseio.com",
+    "project_id": "amikoj-60aa0",
+    "storage_bucket": "amikoj-60aa0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:432735580980:android:337c5bc9e3c3eb8a57eb61",
+        "android_client_info": {
+          "package_name": "com.amikoj.example"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "432735580980-gklhbcu6d8u57oucp9c5pck8omtbva4p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1c9JbOFkqpa4PhJKBeba8-PSH7FvgodQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "432735580980-gklhbcu6d8u57oucp9c5pck8omtbva4p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

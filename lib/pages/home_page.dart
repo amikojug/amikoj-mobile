@@ -9,12 +9,15 @@ import '../constants/constants.dart';
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       backgroundColor: backgroundColor,
       body: Stack(
         alignment: Alignment.bottomCenter,
         children: <Widget>[
-          SvgPicture.asset('assets/images/background.svg', fit: BoxFit.cover,),
+          SvgPicture.asset(
+            'assets/images/background.svg',
+            fit: BoxFit.cover,
+          ),
           Center(
             child: Container(
                 alignment: Alignment.center,
@@ -25,17 +28,26 @@ class HomePage extends StatelessWidget {
                     Expanded(
                       child: Column(
                         children: <Widget>[
-                          Spacer(flex: 3,),
-                          PillButton("Create room", redirect: "/createRoom",),
+                          Spacer(
+                            flex: 3,
+                          ),
+                          PillButton(
+                            "Create room",
+                            redirect: "/createRoom",
+                          ),
                           Spacer(),
-                          PillButton("Join room", redirect: "/joinRoom",),
-                          Spacer(flex: 3,),
+                          PillButton(
+                            "Join room",
+                            redirect: "/joinRoom",
+                          ),
+                          Spacer(
+                            flex: 3,
+                          ),
                         ],
                       ),
                     ),
                   ],
-                )
-            ),
+                )),
           )
         ],
       ),

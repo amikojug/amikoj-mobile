@@ -1,3 +1,4 @@
+import 'package:amikoj/pages/loading.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,7 +6,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_conditional_rendering/flutter_conditional_rendering.dart';
-
+import 'package:amikoj/services/auth.dart';
 import 'package:amikoj/components/pill_button.dart';
 import 'package:amikoj/components/pill_input.dart';
 
@@ -23,6 +24,8 @@ class _LoginPageState extends State<LoginPage> {
   String loginText = "";
   String passwordText = "";
   bool isKeyboardOpened = false;
+  String error = '';
+  bool loading = false;
 
   @override
   void initState() {
@@ -53,53 +56,125 @@ class _LoginPageState extends State<LoginPage> {
     return loginText.isNotEmpty && passwordText.isNotEmpty;
   }
 
+  final AuthService _auth = AuthService();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: new GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-        },
-        child: Stack(
-          children: <Widget>[
-            SvgPicture.asset('assets/images/background.svg', fit: BoxFit.cover,),
-            Center(
-              child: Container(
-                  alignment: Alignment.center,
-                  child: Column(
-                    mainAxisAlignment: isKeyboardOpened ? MainAxisAlignment.spaceBetween : MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Spacer(),
-                      Expanded(
+    return loading
+        ? Loading()
+        : Scaffold(
+            backgroundColor: backgroundColor,
+            body: new GestureDetector(
+              onTap: () {
+                FocusScope.of(context).requestFocus(new FocusNode());
+              },
+              child: Stack(
+                children: <Widget>[
+                  SvgPicture.asset(
+                    'assets/images/background.svg',
+                    fit: BoxFit.cover,
+                  ),
+                  Center(
+                    child: Container(
+                        alignment: Alignment.center,
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: isKeyboardOpened
+                              ? MainAxisAlignment.spaceBetween
+                              : MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Spacer(flex: 2,),
-                            PillInput("Username", loginTextController),
                             Spacer(),
-                            PillInput("Password", passwordTextController),
-                            Spacer(),
-                            Shimmer.fromColors(
-                              enabled: isInputValid(),
-                              baseColor: Colors.white,
-                              highlightColor: Color(0x22FFFFFF),
-                              child: PillButton("Log in"),
-                            ),
-                            Spacer(),
-                            if (!isKeyboardOpened)
-                              Column(
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  Text(
+                                    error,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                    ),
+                                  ),
+                                  Spacer(
+                                    flex: 2,
+                                  ),
+                                  PillInput("Email", loginTextController),
+                                  Spacer(),
+                                  PillInput("Password", passwordTextController,
+                                      obscureText: true),
+                                  Spacer(),
+                                  Shimmer.fromColors(
+                                    enabled: isInputValid(),
+                                    baseColor: Colors.white,
+                                    highlightColor: Color(0x22FFFFFF),
+                                    child:
+                                        PillButton("Log in", action: () async {
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      dynamic result = await _auth
+                                          .signInWithEmailAndPassword(
+                                              this.loginText,
+                                              this.passwordText);
+                                      if (result == null) {
+                                        print(result);
+                                        setState(() {
+                                          error =
+                                              'Could  not sign in with those credentials';
+                                          loading = false;
+                                        });
+                                      } else {
+                                        Navigator.pushNamed(context, '/home');
+                                      }
+                                    }),
+                                  ),
+                                  Spacer(),
+                                  if (!isKeyboardOpened)
+                                    Column(
                                       children: <Widget>[
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.pushNamed(context, '/');
-                                          },
-                                          child: Text("Back",
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.pushNamed(
+                                                      context, '/');
+                                                },
+                                                child: Text(
+                                                  "Back",
+                                                  style: TextStyle(
+                                                    fontSize: 20.0,
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.pushNamed(
+                                                      context, '/register');
+                                                },
+                                                child: Text(
+                                                  "Register",
+                                                  style: TextStyle(
+                                                    fontSize: 20.0,
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 8.0),
+                                          child: Text(
+                                            "Or connect with:",
                                             style: TextStyle(
                                               fontSize: 20.0,
                                               color: Colors.white,
@@ -107,64 +182,57 @@ class _LoginPageState extends State<LoginPage> {
                                             ),
                                           ),
                                         ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.pushNamed(context, '/home');
-                                          },
-                                          child: Text("Play as guest",
-                                            style: TextStyle(
-                                              fontSize: 20.0,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            IconButton(
+                                                // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+                                                icon: FaIcon(
+                                                  FontAwesomeIcons
+                                                      .facebookSquare,
+                                                  color: Colors.white,
+                                                  size: 40,
+                                                ),
+                                                onPressed: () {
+                                                  print("Pressed");
+                                                }),
+                                            IconButton(
+                                                // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+                                                icon: FaIcon(
+                                                  FontAwesomeIcons
+                                                      .instagramSquare,
+                                                  color: Colors.white,
+                                                  size: 40,
+                                                ),
+                                                onPressed: () {
+                                                  print("Pressed");
+                                                }),
+                                            IconButton(
+                                                // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+                                                icon: FaIcon(
+                                                  FontAwesomeIcons
+                                                      .googlePlusSquare,
+                                                  color: Colors.white,
+                                                  size: 40,
+                                                ),
+                                                onPressed: () {
+                                                  print("Pressed");
+                                                }),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 8.0),
-                                    child: Text("Or connect with:",
-                                      style: TextStyle(
-                                        fontSize: 20.0,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      IconButton(
-                                        // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-                                          icon: FaIcon(FontAwesomeIcons.facebookSquare, color: Colors.white, size: 40,),
-                                          onPressed: () { print("Pressed"); }
-                                      ),
-                                      IconButton(
-                                        // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-                                          icon: FaIcon(FontAwesomeIcons.instagramSquare, color: Colors.white, size: 40,),
-                                          onPressed: () { print("Pressed"); }
-                                      ),
-                                      IconButton(
-                                        // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-                                          icon: FaIcon(FontAwesomeIcons.googlePlusSquare, color: Colors.white, size: 40,),
-                                          onPressed: () { print("Pressed"); }
-                                      ),
-                                    ],
-                                  ),
+                                  Spacer()
                                 ],
                               ),
-                            Spacer()
+                            ),
                           ],
-                        ),
-                      ),
-                    ],
+                        )),
                   )
+                ],
               ),
-            )
-          ],
-        ),
-      ),
-    );
+            ),
+          );
   }
 }
