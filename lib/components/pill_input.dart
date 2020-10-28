@@ -4,13 +4,15 @@ import 'dart:ui';
 class PillInput extends StatelessWidget {
   final String labelText;
   final TextEditingController textEditingController;
+  final bool obscureText;
 
-  PillInput(this.labelText, this.textEditingController);
+  PillInput(this.labelText, this.textEditingController, { this.obscureText = false });
 
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: TextFormField(
+        obscureText: this.obscureText,
         controller: textEditingController,
           textAlign: TextAlign.center,
           style: TextStyle(

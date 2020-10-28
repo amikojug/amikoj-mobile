@@ -8,19 +8,19 @@ enum authProblems { UserNotFound, PasswordNotValid, NetworkError }
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  UserModule _userfromFireBaseUser(User user) {
+  UserModule _userFromFireBaseUser(User user) {
     return user != null ? UserModule(uid: user.uid) : null;
   }
 
   Stream<UserModule> get user {
-    return _auth.authStateChanges().map(_userfromFireBaseUser);
+    return _auth.authStateChanges().map(_userFromFireBaseUser);
   }
 
   Future signInAnon() async {
     try {
       UserCredential result = await _auth.signInAnonymously();
       User user = result.user;
-      return _userfromFireBaseUser(user);
+      return _userFromFireBaseUser(user);
     } catch (e) {
       print(e.toString());
       return null;
@@ -32,7 +32,7 @@ class AuthService {
       final UserCredential result = (await _auth.signInWithCredential(
           EmailAuthProvider.credential(email: email, password: password)));
       User user = result.user;
-      return _userfromFireBaseUser(user);
+      return _userFromFireBaseUser(user);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
@@ -53,7 +53,7 @@ class AuthService {
       User user = result.user;
       // create a new document fir the user with uid
       await DatabaseService(uid: user.uid).updateUserData('', 0, 0, 0, 0);
-      return _userfromFireBaseUser(user);
+      return _userFromFireBaseUser(user);
     } catch (e) {
       print(e.toString());
       return null;
