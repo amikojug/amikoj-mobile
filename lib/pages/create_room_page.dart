@@ -1,3 +1,4 @@
+import 'package:amikoj/components/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -30,6 +31,7 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
+      appBar: AmikojAppBar(),
       backgroundColor: backgroundColor,
       body: GestureDetector(
         onTap: () {

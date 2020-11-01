@@ -1,3 +1,4 @@
+import 'package:amikoj/components/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,34 +11,7 @@ class RoomPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFFBB81F6),
-        actions: [
-          FlatButton(
-            color: Colors.transparent,
-            onPressed: () { Navigator.pushNamed(context, '/account'); },
-            child: Row(
-              children: [
-                Text("Best name", style: whiteText,),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: Container(
-                      width: 44.0,
-                      height: double.infinity,
-                      decoration: new BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: new DecorationImage(
-                              fit: BoxFit.fill,
-                              image: new NetworkImage(
-                                  "https://i.imgur.com/BoN9kdC.png")
-                          )
-                      )),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
+      appBar: AmikojAppBar(),
       backgroundColor: backgroundColor,
       body: Stack(
         alignment: Alignment.bottomCenter,

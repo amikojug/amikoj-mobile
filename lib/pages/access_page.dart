@@ -1,4 +1,9 @@
+import 'package:amikoj/components/user_module.dart';
+import 'package:amikoj/redux/app_state.dart';
+import 'package:amikoj/redux/user_reducer.dart';
+import 'package:amikoj/services/storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:amikoj/services/auth.dart';
@@ -35,12 +40,16 @@ class AccessPage extends StatelessWidget {
                           PillButton(
                             "Play as guest",
                             action: () async {
-                              dynamic result = await _auth.signInAnon();
+                              UserModule result = await _auth.signInAnon();
                               if (result == null) {
                                 print('error signing in');
                               } else {
                                 print('signed in');
-                                print(result);
+                                String avatarUrl = await downloadUserAvatar(result.uid);
+                                if (avatarUrl != null) {
+                                  StoreProvider.of<AppState>(context)
+                                      .dispatch(UpdateUser(avatarUrl: avatarUrl));
+                                }
                                 Navigator.pushNamed(context, '/home');
                               }
                             },

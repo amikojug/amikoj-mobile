@@ -1,3 +1,4 @@
+import 'package:amikoj/components/app_bar.dart';
 import 'package:amikoj/components/pill_input.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
@@ -31,6 +32,7 @@ class _JoinRoomPageState extends State<JoinRoomPage> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
+      appBar: AmikojAppBar(),
       backgroundColor: backgroundColor,
       body: Stack(
         alignment: Alignment.bottomCenter,

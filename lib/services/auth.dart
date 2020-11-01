@@ -16,7 +16,11 @@ class AuthService {
     return _auth.authStateChanges().map(_userFromFireBaseUser);
   }
 
-  Future signInAnon() async {
+  UserModule getCurrentUser() {
+    return _userFromFireBaseUser(_auth.currentUser);
+  }
+
+  Future<UserModule> signInAnon() async {
     try {
       UserCredential result = await _auth.signInAnonymously();
       User user = result.user;

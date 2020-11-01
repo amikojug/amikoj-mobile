@@ -1,3 +1,4 @@
+import 'package:amikoj/components/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,6 +11,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AmikojAppBar(),
       backgroundColor: backgroundColor,
       body: Stack(
         alignment: Alignment.bottomCenter,

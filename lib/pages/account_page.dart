@@ -1,92 +1,70 @@
 import 'dart:ui';
 
+import 'package:amikoj/redux/app_state.dart';
+import 'package:amikoj/redux/user_reducer.dart';
+import 'package:amikoj/redux/user_state.dart';
+import 'package:amikoj/services/auth.dart';
 import 'package:amikoj/services/storage.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui';
 import 'dart:async';
 import 'dart:io';
 
 import 'package:amikoj/constants/constants.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:async';
-import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
-
+import 'package:redux/redux.dart';
+import 'package:amikoj/components/app_bar.dart';
 
 class AccountPage extends StatefulWidget {
+  final Store<AppState> store;
+
+  AccountPage(this.store);
+
   @override
   _AccountPageState createState() => new _AccountPageState();
 }
 
 class _AccountPageState extends State<AccountPage> {
   File _image;
-  String _avatar = "";
+  final AuthService _auth = AuthService();
 
-  Future getImage() async {
+  Future getImage(BuildContext context) async {
     var pickedFile = await new ImagePicker().getImage(source: ImageSource.gallery, imageQuality: 10);
     File croppedImage = await ImageCropper.cropImage(
       sourcePath: pickedFile.path,
       cropStyle: CropStyle.circle,
     );
-    await uploadUserAvatar(croppedImage, 'abc');
+    var user = _auth.getCurrentUser();
+    String url = await uploadUserAvatar(croppedImage, user.uid);
+    StoreProvider.of<AppState>(context)
+        .dispatch(UpdateUser(avatarUrl: url));
     setState(() {
       _image = croppedImage;
     });
   }
 
   @override
-  void initState() {
-    super.initState();
-    downloadUserAvatar('abc').then((value) {
-      setState(() {
-        print(value);
-        _avatar = value;
-      });
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFFAABBCC),
-        actions: [
-          FlatButton(
-            color: Colors.transparent,
-            onPressed: () { Navigator.pushNamed(context, '/account'); },
-            child: Row(
-              children: [
-                Text("Best name", style: whiteText,),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: ClipOval(
-                    child: CachedNetworkImage(
-                      key: Key(_avatar),
-                      width: 44,
-                      height: 44,
-                      fit: BoxFit.cover,
-                      imageUrl: _avatar,
-                      placeholder: (context, url) => CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => CircularProgressIndicator(),
-                    ),
-                  ),
-                ),
-              ],
+  Widget build(BuildContext buildContext) {
+    return new StoreConnector<AppState, UserState>(
+        rebuildOnChange: true,
+        converter: (store) => store.state.userState,
+        builder: (context, state) {
+          return new Scaffold(
+            appBar: AmikojAppBar(),
+            body: new Center(
+              child: _image == null
+                  ? new Text('No image selected.')
+                  : new CircleAvatar(backgroundImage: new FileImage(_image), radius: 200.0,),
             ),
-          )
-        ],
-      ),
-      body: new Center(
-        child: _image == null
-            ? new Text('No image selected.')
-            : new CircleAvatar(backgroundImage: new FileImage(_image), radius: 200.0,),
-      ),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: getImage,
-        tooltip: 'Pick Image',
-        child: new Icon(Icons.add_a_photo),
-      ),
+            floatingActionButton: new FloatingActionButton(
+              onPressed: () { getImage(context); } ,
+              tooltip: 'Pick Image',
+              child: new Icon(Icons.add_a_photo),
+            ),
+          );
+        },
     );
   }
 }
