@@ -193,7 +193,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                               MainAxisAlignment.center,
                                           children: [
                                             IconButton(
-                                                // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
                                                 icon: FaIcon(
                                                   FontAwesomeIcons
                                                       .facebookSquare,
@@ -204,7 +203,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                                   print("Pressed");
                                                 }),
                                             IconButton(
-                                                // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
                                                 icon: FaIcon(
                                                   FontAwesomeIcons
                                                       .instagramSquare,
@@ -215,7 +213,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                                   print("Pressed");
                                                 }),
                                             IconButton(
-                                                // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
                                                 icon: FaIcon(
                                                   FontAwesomeIcons
                                                       .googlePlusSquare,

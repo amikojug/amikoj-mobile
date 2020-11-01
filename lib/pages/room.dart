@@ -10,6 +10,34 @@ class RoomPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFFBB81F6),
+        actions: [
+          FlatButton(
+            color: Colors.transparent,
+            onPressed: () { Navigator.pushNamed(context, '/account'); },
+            child: Row(
+              children: [
+                Text("Best name", style: whiteText,),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, right: 8),
+                  child: Container(
+                      width: 44.0,
+                      height: double.infinity,
+                      decoration: new BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: new DecorationImage(
+                              fit: BoxFit.fill,
+                              image: new NetworkImage(
+                                  "https://i.imgur.com/BoN9kdC.png")
+                          )
+                      )),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
       backgroundColor: backgroundColor,
       body: Stack(
         alignment: Alignment.bottomCenter,
@@ -23,7 +51,7 @@ class RoomPage extends StatelessWidget {
                   children: <Widget>[
                     Spacer(flex: 2,),
                     Expanded(
-                      flex: 3,
+                      flex: 4,
                       child: Column(
                         children: <Widget>[
                           Expanded(
@@ -44,12 +72,24 @@ class RoomPage extends StatelessWidget {
                                         children: <Widget>[
                                           Padding(
                                             padding: const EdgeInsets.symmetric(vertical: 10),
-                                            child: Text("WW",
+                                            child: Text("Best room name",
                                               style: TextStyle(
                                                 fontSize: 20.0,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w500,
                                               ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Divider(color: Colors.white, thickness: 4, height: 0,),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 10),
+                                            child: Text("PIN: 123456",
+                                              style: whiteText,
                                             ),
                                           ),
                                         ],
