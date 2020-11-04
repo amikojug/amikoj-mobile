@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:amikoj/components/app_bar.dart';
+import 'package:amikoj/services/realtime_database.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,8 +11,21 @@ import 'package:amikoj/constants/constants.dart';
 import 'package:amikoj/components/player_grid.dart';
 
 class RoomPage extends StatelessWidget {
+
+  void _createRoomSubscription(BuildContext context) {
+    String roomName = ModalRoute.of(context).settings.arguments;
+    createRoomSubscription(roomName);
+    initRoom(context);
+  }
+
+  Future initRoom(BuildContext context) async {
+    String roomName = ModalRoute.of(context).settings.arguments;
+    await updateRoom(roomName);
+  }
+
   @override
   Widget build(BuildContext context) {
+    _createRoomSubscription(context);
     return Scaffold(
       appBar: AmikojAppBar(),
       backgroundColor: backgroundColor,
@@ -76,6 +92,7 @@ class RoomPage extends StatelessWidget {
                               )
                           ),
                           Spacer(),
+                          FlatButton(onPressed: () async { await initRoom(context); }, child: Text("asasa")),
                           PillButton("Leave", redirect: "/home",),
                           Spacer(),
                         ],
