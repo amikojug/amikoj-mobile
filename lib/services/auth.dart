@@ -2,6 +2,8 @@ import 'package:amikoj/components/user_module.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:amikoj/services/database.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_login_facebook/flutter_login_facebook.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 enum authProblems { UserNotFound, PasswordNotValid, NetworkError }
 
@@ -27,6 +29,7 @@ class AuthService {
       return _userFromFireBaseUser(user);
     } catch (e) {
       print(e.toString());
+      
       return null;
     }
   }
@@ -58,6 +61,52 @@ class AuthService {
       // create a new document fir the user with uid
       await DatabaseService(uid: user.uid).updateUserData('', 0, 0, 0, 0);
       return _userFromFireBaseUser(user);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future loginWithFacebook() async {
+    try {
+      final facebookLogin = FacebookLogin();
+      final FacebookLoginResult resultFacebook =
+          await facebookLogin.logIn(permissions: [
+        FacebookPermission.publicProfile,
+        FacebookPermission.email,
+      ]);
+      if (resultFacebook.status == FacebookLoginStatus.Success) {
+        final FacebookAccessToken token = resultFacebook.accessToken;
+        final AuthCredential fbCredential =
+            FacebookAuthProvider.credential(token.token);
+        print(token.token);
+        print('------------------fbcredential----------------------------');
+        print(fbCredential);
+        UserCredential result = await _auth.signInWithCredential(fbCredential);
+        return _userFromFireBaseUser(result.user);
+      }
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future loginWithGoogle() async {
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      final GoogleSignInAccount googleSignInAccount =
+          await googleSignIn.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      final UserCredential authResult =
+          await _auth.signInWithCredential(credential);
+      return _userFromFireBaseUser(authResult.user);
     } catch (e) {
       print(e.toString());
       return null;

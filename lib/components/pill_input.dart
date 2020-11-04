@@ -5,15 +5,21 @@ class PillInput extends StatelessWidget {
   final String labelText;
   final TextEditingController textEditingController;
   final bool obscureText;
+  final Function validator;
 
-  PillInput(this.labelText, this.textEditingController, { this.obscureText = false });
+  PillInput(
+    this.labelText,
+    this.textEditingController, {
+    this.obscureText = false,
+    this.validator,
+  });
 
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: TextFormField(
-        obscureText: this.obscureText,
-        controller: textEditingController,
+          obscureText: this.obscureText,
+          controller: textEditingController,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 28.0,
@@ -21,7 +27,7 @@ class PillInput extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
           decoration: InputDecoration(
-            floatingLabelBehavior:FloatingLabelBehavior.always,
+            floatingLabelBehavior: FloatingLabelBehavior.always,
             labelText: this.labelText,
             labelStyle: TextStyle(
               color: Colors.white,
@@ -31,30 +37,28 @@ class PillInput extends StatelessWidget {
             contentPadding: EdgeInsets.all(19.0),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(36)),
-              borderSide: BorderSide(width: 4,color: Colors.white),
+              borderSide: BorderSide(width: 4, color: Colors.white),
             ),
             disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(4)),
-              borderSide: BorderSide(width: 1,color: Colors.orange),
+              borderSide: BorderSide(width: 1, color: Colors.orange),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(40)),
-              borderSide: BorderSide(width: 4,color: Colors.white),
+              borderSide: BorderSide(width: 4, color: Colors.white),
             ),
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(4)),
-                borderSide: BorderSide(width: 1,)
-            ),
+                borderSide: BorderSide(
+                  width: 1,
+                )),
             errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(4)),
-                borderSide: BorderSide(width: 1,color: Colors.black)
-            ),
+                borderSide: BorderSide(width: 1, color: Colors.black)),
             focusedErrorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(4)),
-                borderSide: BorderSide(width: 1,color: Colors.yellowAccent)
-            ),
-          )
-      ),
+                borderSide: BorderSide(width: 1, color: Colors.yellowAccent)),
+          )),
     );
   }
 }

@@ -102,37 +102,68 @@ class _RegisterPageState extends State<RegisterPage> {
                                   Spacer(
                                     flex: 1,
                                   ),
-                                  PillInput("Email", loginTextController),
-                                  Spacer(),
-                                  PillInput("Password", passwordTextController,
-                                      obscureText: true),
-                                  Spacer(),
-                                  PillInput("Confirm Password",
-                                      confirmPasswordTextController,
-                                      obscureText: true),
-                                  Spacer(),
-                                  Shimmer.fromColors(
-                                    enabled: isInputValid(),
-                                    baseColor: Colors.white,
-                                    highlightColor: Color(0x22FFFFFF),
-                                    child: PillButton("Register",
-                                        action: () async {
-                                      setState(() {
-                                        loading = true;
-                                      });
-                                      dynamic result = await _auth
-                                          .registerWithEmailAndPassword(
-                                              this.loginText,
-                                              this.passwordText);
-                                      if (result == null) {
-                                        setState(() => {
-                                              error =
-                                                  'please supply a valid email',
-                                              loading = false,
-                                            });
-                                        Navigator.pushNamed(context, '/login');
-                                      }
-                                    }),
+                                  Form(
+                                    key: _formKey,
+                                    child: Column(
+                                      mainAxisAlignment: isKeyboardOpened
+                                          ? MainAxisAlignment.spaceBetween
+                                          : MainAxisAlignment.spaceAround,
+                                      children: [
+                                        PillInput(
+                                          "Email",
+                                          loginTextController,
+                                          validator: (val) {
+                                            val.isEmpty ? 'Enter email' : null;
+                                          },
+                                        ),
+
+                                        SizedBox(height: 6.0),
+                                        // Spacer(),
+                                        PillInput(
+                                            "Password", passwordTextController,
+                                            validator: (val) {
+                                          val.length > 6
+                                              ? 'Enter a password 6+ chars long'
+                                              : null;
+                                        }, obscureText: true),
+                                        SizedBox(height: 6.0),
+                                        // Spacer(),
+                                        PillInput("Confirm Password",
+                                            confirmPasswordTextController,
+                                            obscureText: true),
+                                        SizedBox(height: 6.0),
+                                        // Spacer(),
+                                        Shimmer.fromColors(
+                                          enabled: isInputValid(),
+                                          baseColor: Colors.white,
+                                          highlightColor: Color(0x22FFFFFF),
+                                          child: PillButton("Register",
+                                              action: () async {
+                                            print(_formKey.currentState
+                                                .validate());
+                                            if (_formKey.currentState
+                                                .validate()) {
+                                              setState(() {
+                                                loading = true;
+                                              });
+                                              dynamic result = await _auth
+                                                  .registerWithEmailAndPassword(
+                                                      this.loginText,
+                                                      this.passwordText);
+                                              if (result == null) {
+                                                setState(() => {
+                                                      error =
+                                                          'please supply a valid email',
+                                                      loading = false,
+                                                    });
+                                                Navigator.pushNamed(
+                                                    context, '/login');
+                                              }
+                                            }
+                                          }),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   Spacer(),
                                   if (!isKeyboardOpened)
@@ -159,71 +190,74 @@ class _RegisterPageState extends State<RegisterPage> {
                                                   ),
                                                 ),
                                               ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Navigator.pushNamed(
-                                                      context, '/login');
-                                                },
-                                                child: Text(
-                                                  "Play as guest",
-                                                  style: TextStyle(
-                                                    fontSize: 20.0,
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                              ),
+                                              // GestureDetector(
+                                              //   onTap: () {
+                                              //     Navigator.pushNamed(
+                                              //         context, '/login');
+                                              //   },
+                                              // child: Text(
+                                              //   "Play as guest",
+                                              //   style: TextStyle(
+                                              //     fontSize: 20.0,
+                                              //     color: Colors.white,
+                                              //     fontWeight: FontWeight.w500,
+                                              //   ),
+                                              // ),
+                                              // ),
                                             ],
                                           ),
                                         ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 8.0),
-                                          child: Text(
-                                            "Or connect with:",
-                                            style: TextStyle(
-                                              fontSize: 20.0,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            IconButton(
-                                                icon: FaIcon(
-                                                  FontAwesomeIcons
-                                                      .facebookSquare,
-                                                  color: Colors.white,
-                                                  size: 40,
-                                                ),
-                                                onPressed: () {
-                                                  print("Pressed");
-                                                }),
-                                            IconButton(
-                                                icon: FaIcon(
-                                                  FontAwesomeIcons
-                                                      .instagramSquare,
-                                                  color: Colors.white,
-                                                  size: 40,
-                                                ),
-                                                onPressed: () {
-                                                  print("Pressed");
-                                                }),
-                                            IconButton(
-                                                icon: FaIcon(
-                                                  FontAwesomeIcons
-                                                      .googlePlusSquare,
-                                                  color: Colors.white,
-                                                  size: 40,
-                                                ),
-                                                onPressed: () {
-                                                  print("Pressed");
-                                                }),
-                                          ],
-                                        ),
+                                        // Padding(
+                                        //   padding:
+                                        //       const EdgeInsets.only(top: 8.0),
+                                        //   child: Text(
+                                        //     "Or connect with:",
+                                        //     style: TextStyle(
+                                        //       fontSize: 20.0,
+                                        //       color: Colors.white,
+                                        //       fontWeight: FontWeight.w500,
+                                        //     ),
+                                        //   ),
+                                        // ),
+                                        // Row(
+                                        //   mainAxisAlignment:
+                                        //       MainAxisAlignment.center,
+                                        //   children: [
+                                        //     IconButton(
+                                        //         // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+                                        //         icon: FaIcon(
+                                        //           FontAwesomeIcons
+                                        //               .facebookSquare,
+                                        //           color: Colors.white,
+                                        //           size: 40,
+                                        //         ),
+                                        //         onPressed: () {
+                                        //           print("Pressed");
+                                        //         }),
+                                        //     IconButton(
+                                        //         // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+                                        //         icon: FaIcon(
+                                        //           FontAwesomeIcons
+                                        //               .instagramSquare,
+                                        //           color: Colors.white,
+                                        //           size: 40,
+                                        //         ),
+                                        //         onPressed: () {
+                                        //           print("Pressed");
+                                        //         }),
+                                        //     IconButton(
+                                        //         // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+                                        //         icon: FaIcon(
+                                        //           FontAwesomeIcons
+                                        //               .googlePlusSquare,
+                                        //           color: Colors.white,
+                                        //           size: 40,
+                                        //         ),
+                                        //         onPressed: () {
+                                        //           print("Pressed");
+                                        //         }),
+                                        //   ],
+                                        // ),
                                       ],
                                     ),
                                   Spacer()

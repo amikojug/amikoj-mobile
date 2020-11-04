@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "432735580980-i9dhbat31ln3sf2shlfmj90l6hr3ii7s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.amikoj.example",
+            "certificate_hash": "a55470bcba2279979f85881bf5a1d082b671fd63"
+          }
+        },
+        {
           "client_id": "432735580980-gklhbcu6d8u57oucp9c5pck8omtbva4p.apps.googleusercontent.com",
           "client_type": 3
         }
