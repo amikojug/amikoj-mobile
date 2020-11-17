@@ -13,12 +13,17 @@ import 'package:amikoj/pages/room.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
+final Store<AppState> store = Store<AppState>(appReducer,
+    initialState: AppState.initialState());
+
+Store<AppState> getStore() {
+  return store;
+}
+
 class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Store<AppState> store = Store<AppState>(appReducer,
-        initialState: AppState.initialState());
     return new StoreProvider<AppState>(
       store: store,
       child: MaterialApp(
@@ -36,7 +41,7 @@ class App extends StatelessWidget {
           '/createRoom': (context) => CreateRoomPage(),
           '/joinRoom': (context) => JoinRoomPage(),
           '/room': (context) => RoomPage(),
-          '/account': (context) => AccountPage(store),
+          '/account': (context) => AccountPage(),
         },
       ),
     );

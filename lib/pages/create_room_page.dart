@@ -1,4 +1,5 @@
 import 'package:amikoj/components/app_bar.dart';
+import 'package:amikoj/constants/room_action_type.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -54,7 +55,13 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
                             Spacer(flex: 3,),
                             PillInput("Room Name", roomNameTextController),
                             Spacer(),
-                            PillButton("Create room", redirect: "/room",),
+                            PillButton("Create room",
+                              redirect: "/room",
+                              redirectArgument: {
+                                "type": RoomAction.create,
+                                "roomName": roomNameTextController.text
+                              },
+                            ),
                             Spacer(),
                             PillButton("Back", redirect: "/home",),
                             Spacer(flex: 3,),

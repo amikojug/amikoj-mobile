@@ -1,11 +1,47 @@
 import 'dart:async';
 import 'dart:io' show Platform;
-import 'package:firebase_core/firebase_core.dart';
+import 'package:amikoj/app.dart';
+import 'package:amikoj/components/user_module.dart';
+import 'package:amikoj/redux/app_state.dart';
+import 'package:amikoj/services/auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
+import 'package:redux/redux.dart';
 
 DatabaseReference _roomRef = FirebaseDatabase.instance.reference().child('rooms');
 StreamSubscription<Event> _roomSubscription;
+final AuthService _auth = AuthService();
 
+Future addYourselfToTheRoom(String roomId) async {
+  UserModule currentUser = _auth.getCurrentUser();
+  Store<AppState> s = getStore();
+  String avatarUrl = s.state.userState.avatarUrl;
+  await updateRoom(roomId, (val) {
+    Map<String, dynamic> data = {
+      ...val,
+      "players": [...val["players"], {
+        "playerId": currentUser.uid,
+        "avatarUrl": avatarUrl
+      }]
+    };
+    return data;
+  });
+}
+
+Future initRoom(String roomId) async {
+  UserModule currentUser = _auth.getCurrentUser();
+  Store<AppState> s = getStore();
+  String avatarUrl = s.state.userState.avatarUrl;
+  await updateRoom(roomId, (val) {
+    return {
+      "hostId": currentUser.uid,
+      "players": [{
+        "playerId": currentUser.uid,
+        "avatarUrl": avatarUrl
+      }]
+    };
+  });
+}
 
 void createRoomSubscription(String roomName) {
   createSubscription(
@@ -19,30 +55,30 @@ void createRoomSubscription(String roomName) {
 }
 
 
-Future updateRoom(String roomName) async {
+Future updateRoom(String roomName, Function(dynamic) mutate) async {
   await updateDatabaseState(
     ref: _roomRef,
     childPath: roomName,
     callback: (e) {
-      print('Callllllllllllll $e');
+      print('updateRoom.callback: $e');
     },
-    mutate: (val) {
-      return  val == null ? "asdas" : val + "ww222";
-    }
+    mutate: mutate,
   );
 }
 
 void createSubscription({ DatabaseReference ref, StreamSubscription<Event> subscription,
   String refPath, Function(dynamic) onUpdate }) {
-  final DatabaseReference targetRef = refPath.isNotEmpty ? ref.child(refPath) : ref;
-  targetRef.keepSynced(true);
-  subscription = targetRef.onValue.listen((Event event) {
-    onUpdate(event.snapshot.value);
-    print(event.snapshot.value);
-  }, onError: (Object o) {
-    final DatabaseError error = o;
-    print('error $error');
-  });
+  if (subscription == null) {
+    final DatabaseReference targetRef = refPath.isNotEmpty ? ref.child(refPath) : ref;
+    targetRef.keepSynced(true);
+    subscription = targetRef.onValue.listen((Event event) {
+      print("subscription: ${event.snapshot.value}");
+      onUpdate(event.snapshot.value);
+    }, onError: (Object o) {
+      final DatabaseError error = o;
+      print('error $error');
+    });
+  }
 }
 
 void cancelSubscription(StreamSubscription<Event> subscription) {

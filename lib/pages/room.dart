@@ -1,6 +1,9 @@
 import 'dart:convert';
 
 import 'package:amikoj/components/app_bar.dart';
+import 'package:amikoj/components/user_module.dart';
+import 'package:amikoj/constants/room_action_type.dart';
+import 'package:amikoj/redux/app_state.dart';
 import 'package:amikoj/services/realtime_database.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
@@ -9,18 +12,28 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:amikoj/components/pill_button.dart';
 import 'package:amikoj/constants/constants.dart';
 import 'package:amikoj/components/player_grid.dart';
+import 'package:amikoj/services/auth.dart';
+import 'package:amikoj/app.dart';
+import 'package:redux/redux.dart';
 
 class RoomPage extends StatelessWidget {
+  final AuthService _auth = AuthService();
 
-  void _createRoomSubscription(BuildContext context) {
-    String roomName = ModalRoute.of(context).settings.arguments;
-    createRoomSubscription(roomName);
-    initRoom(context);
+  void _createOrJoinRoom(BuildContext context) {
+    Map<String, dynamic> routeArgs = ModalRoute.of(context).settings.arguments;
+    if (routeArgs["type"] == RoomAction.create) {
+      initRoom(routeArgs["roomName"]);
+    } else if (routeArgs["type"] == RoomAction.join) {
+      addYourselfToTheRoom(routeArgs["roomName"]);
+    }
   }
 
-  Future initRoom(BuildContext context) async {
-    String roomName = ModalRoute.of(context).settings.arguments;
-    await updateRoom(roomName);
+  void _createRoomSubscription(BuildContext context) {
+    Map<String, dynamic> routeArgs = ModalRoute.of(context).settings.arguments;
+    print(routeArgs);
+    String roomName = routeArgs["roomName"];
+    createRoomSubscription(roomName);
+    _createOrJoinRoom(context);
   }
 
   @override
@@ -92,7 +105,6 @@ class RoomPage extends StatelessWidget {
                               )
                           ),
                           Spacer(),
-                          FlatButton(onPressed: () async { await initRoom(context); }, child: Text("asasa")),
                           PillButton("Leave", redirect: "/home",),
                           Spacer(),
                         ],
