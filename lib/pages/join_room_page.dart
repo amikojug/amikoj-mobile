@@ -1,5 +1,6 @@
 import 'package:amikoj/components/app_bar.dart';
 import 'package:amikoj/components/pill_input.dart';
+import 'package:amikoj/constants/room_action_type.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -51,9 +52,17 @@ class _JoinRoomPageState extends State<JoinRoomPage> {
                           Spacer(flex: 3,),
                           PillInput("Room ID", roomIdTextController),
                           Spacer(),
-                          PillButton("Join room", redirect: "/room",),
+                          PillButton("Join room",
+                            redirect: "/room",
+                            redirectArgument: {
+                              "type": RoomAction.join,
+                              "roomName": roomIdTextController.text
+                            },
+                          ),
                           Spacer(),
-                          PillButton("Back", redirect: "/home",),
+                          PillButton("Back",
+                            redirect: "/home",
+                          ),
                           Spacer(flex: 3,),
                         ],
                       ),

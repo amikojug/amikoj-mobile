@@ -18,10 +18,6 @@ import 'package:redux/redux.dart';
 import 'package:amikoj/components/app_bar.dart';
 
 class AccountPage extends StatefulWidget {
-  final Store<AppState> store;
-
-  AccountPage(this.store);
-
   @override
   _AccountPageState createState() => new _AccountPageState();
 }

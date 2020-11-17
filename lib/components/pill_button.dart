@@ -5,8 +5,9 @@ class PillButton extends StatelessWidget {
   final String text;
   final String redirect;
   final Function action;
+  final dynamic redirectArgument;
 
-  PillButton(this.text, {this.redirect, this.action});
+  PillButton(this.text, {this.redirect, this.action, this.redirectArgument});
 
   Widget build(BuildContext context) {
     return Padding(
@@ -23,7 +24,7 @@ class PillButton extends StatelessWidget {
           minWidth: double.infinity,
           onPressed: () async {
             if (this.redirect != null)
-              Navigator.pushNamed(context, this.redirect, arguments: "gggg");
+              Navigator.pushNamed(context, this.redirect, arguments: this.redirectArgument);
             else if (this.action != null) action();
           },
           child: Text(
