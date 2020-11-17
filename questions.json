@@ -1,0 +1,73 @@
+{
+    "questions": [
+        {
+            "id": 1,
+            "question": "Która z sytuacji najbardziej Cię przeraża?",
+            "odp1": "Nietoperz wplątany we włosy",
+            "odp2": "Mysz pod kołdrą",
+            "odp3": "Długi czarny włos w zupie"
+        },
+        {
+            "id": 2,
+            "question": "Gdyby zaproponowano Ci pracę w cyrku, jaki byłby twój wybór?",
+            "odp1": "Pogromca lwów",
+            "odp2": "Klaun",
+            "odp3": "Akrobata"
+        },
+        {
+            "id": 3,
+            "question": "Czy zabierasz autostopowiczów?",
+            "odp1": "Zawsze",
+            "odp2": "Czasami",
+            "odp3": "Rzadko lub nigdy"
+        },
+        {
+            "id": 4,
+            "question": "W środku nocy budzi Cię głośna muzyka dobiegająca z mieszkania sąsiada. Co robisz?",
+            "odp1": "Idę zwrócić mu uwagę",
+            "odp2": "Dzwonię na policje",
+            "odp3": "Staram się zasnąć"
+        },
+        {
+            "id": 5,
+            "question": "Czy lubisz oglądać w telewizji programy typu „talent show”?",
+            "odp1": "Tak, oglądam często",
+            "odp2": "Od czasu do czasu",
+            "odp3": "Nie znoszę ich"
+        },
+        {
+            "id": 6,
+            "question": "Jak długo, twoim zdaniem, przetrwa ludzkość jako gatunek?",
+            "odp1": "Mniej niż 1000 lat",
+            "odp2": "Więcej niż 1000 lat, mniej niż 10 000 lat",
+            "odp3": "Więcej niż 10 000 lat"
+        },{
+            "id": 7,
+            "question": "Czy komukolwiek z grających jesteś winien / winna jakieś przeprosiny?",
+            "odp1": "Tak mi się wydaje",
+            "odp2": "To możliwe",
+            "odp3": "Raczej nie"
+        },
+        {
+            "id": 8,
+            "question": "Wygląd ilu z tych osób potrafisz sobie bardzo dokładnie przywołać w pamięci: Sharon Stone, Freddie Mercury, Meg Ryan?",
+            "odp1": "Żadnego",
+            "odp2": "Jeden, może dwa",
+            "odp3": "Wszystkie trzy"
+        },
+        {
+            "id": 9,
+            "question": "Czy masz poczucie winy po obiedzie w fast foodzie?",
+            "odp1": "Zawsze",
+            "odp2": "Czasami",
+            "odp3": "Nigdy"
+        },
+        {
+            "id": 10,
+            "question": "Właśnie wynaleziono wehikuł czasu. Zaoferowano Ci tygodniową wyprawę w przyszłość. Dokąd się wybierasz?",
+            "odp1": "Moskwa 2025 rok",
+            "odp2": "Pekin 2411 rok",
+            "odp3": "Jerozolima 4054 rok"
+        }
+    ]
+}	
