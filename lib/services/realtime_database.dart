@@ -19,16 +19,18 @@ Future addYourselfToTheRoom(String roomId) async {
   Store<AppState> s = getStore();
   String avatarUrl = s.state.userState.avatarUrl;
   await updateRoom(roomId, (val) {
-    bool playersAlreadyExistInRoom = [...val["players"]].any((element) => element["playerId"] == currentUser.uid);
-    if (!playersAlreadyExistInRoom) {
-      Map<String, dynamic> data = {
-        ...val,
-        "players": [...val["players"], {
-          "playerId": currentUser.uid,
-          "avatarUrl": avatarUrl
-        }]
-      };
-      return data;
+    if (val != null) {
+      bool playersAlreadyExistInRoom = [...val["players"]].any((element) => element["playerId"] == currentUser.uid);
+      if (!playersAlreadyExistInRoom) {
+        Map<String, dynamic> data = {
+          ...val,
+          "players": [...val["players"], {
+            "playerId": currentUser.uid,
+            "avatarUrl": avatarUrl
+          }]
+        };
+        return data;
+      }
     }
     return val;
   });

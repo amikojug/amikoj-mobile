@@ -10,14 +10,17 @@ class PillInput extends StatelessWidget {
   PillInput(
     this.labelText,
     this.textEditingController, {
+    Key key,
     this.obscureText = false,
     this.validator,
-  });
+  }) : super(key: key);
 
   Widget build(BuildContext context) {
+    print(validator);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: TextFormField(
+          validator: this.validator,
           obscureText: this.obscureText,
           controller: textEditingController,
           textAlign: TextAlign.center,
@@ -27,6 +30,11 @@ class PillInput extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
           decoration: InputDecoration(
+            errorStyle: TextStyle(
+              fontSize: 18.0,
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
+            ),
             floatingLabelBehavior: FloatingLabelBehavior.always,
             labelText: this.labelText,
             labelStyle: TextStyle(

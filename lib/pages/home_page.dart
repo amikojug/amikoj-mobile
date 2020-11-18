@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AmikojAppBar(),
+      appBar: AmikojAppBar(context),
       backgroundColor: backgroundColor,
       body: Stack(
         alignment: Alignment.bottomCenter,

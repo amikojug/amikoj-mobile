@@ -21,7 +21,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final loginTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final confirmPasswordTextController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _autovalidate = false;
   final AuthService _auth = AuthService();
 
   String loginText = "";
@@ -30,6 +31,15 @@ class _RegisterPageState extends State<RegisterPage> {
   bool isKeyboardOpened = false;
   bool loading = false;
   String error = '';
+
+  bool validEmail(email) {
+    String p =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+
+    RegExp regExp = new RegExp(p);
+
+    return regExp.hasMatch(email);
+  }
 
   @override
   void initState() {
@@ -66,6 +76,30 @@ class _RegisterPageState extends State<RegisterPage> {
     return loginText.isNotEmpty && passwordText.isNotEmpty;
   }
 
+  void valid() async {
+    print('register');
+    print(_formKey.currentState.validate());
+    if (_formKey.currentState.validate()) {
+      setState(() {
+        loading = true;
+      });
+      dynamic result = await _auth.registerWithEmailAndPassword(
+          this.loginText, this.passwordText);
+      if (result == null) {
+        setState(() => {
+              error = 'please supply a valid email',
+              loading = false,
+            });
+      } else {
+        Navigator.pushNamed(context, '/login');
+      }
+    } else {
+      setState(() {
+        _autovalidate = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return loading
@@ -94,7 +128,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               flex: 2,
                             ),
                             Expanded(
-                              flex: 3,
+                              flex: 4,
                               child: Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
@@ -113,7 +147,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                           "Email",
                                           loginTextController,
                                           validator: (val) {
-                                            val.isEmpty ? 'Enter email' : null;
+                                            print('email ' + val);
+                                            // val.isEmpty ? 'Enter email' : null;
+                                            if (val.isEmpty) {
+                                              return 'Enter email';
+                                            } else if (!validEmail(
+                                                loginTextController.text)) {
+                                              return 'invalid email format';
+                                            } else {
+                                              return null;
+                                            }
                                           },
                                         ),
 
@@ -122,45 +165,39 @@ class _RegisterPageState extends State<RegisterPage> {
                                         PillInput(
                                             "Password", passwordTextController,
                                             validator: (val) {
-                                          val.length > 6
-                                              ? 'Enter a password 6+ chars long'
-                                              : null;
+                                          if (val.length <= 6) {
+                                            return 'Enter a password 6+ chars long';
+                                          } else {
+                                            return null;
+                                          }
                                         }, obscureText: true),
                                         SizedBox(height: 6.0),
                                         // Spacer(),
-                                        PillInput("Confirm Password",
-                                            confirmPasswordTextController,
-                                            obscureText: true),
+                                        PillInput(
+                                          "Confirm Password",
+                                          confirmPasswordTextController,
+                                          obscureText: true,
+                                          validator: (val) {
+                                            if (val.length == 0) {
+                                              return 'Please confirm password';
+                                            } else if (val !=
+                                                passwordTextController.text) {
+                                              return 'incorrect password';
+                                            } else {
+                                              return null;
+                                            }
+                                          },
+                                        ),
                                         SizedBox(height: 6.0),
                                         // Spacer(),
                                         Shimmer.fromColors(
                                           enabled: isInputValid(),
                                           baseColor: Colors.white,
                                           highlightColor: Color(0x22FFFFFF),
-                                          child: PillButton("Register",
-                                              action: () async {
-                                            print(_formKey.currentState
-                                                .validate());
-                                            if (_formKey.currentState
-                                                .validate()) {
-                                              setState(() {
-                                                loading = true;
-                                              });
-                                              dynamic result = await _auth
-                                                  .registerWithEmailAndPassword(
-                                                      this.loginText,
-                                                      this.passwordText);
-                                              if (result == null) {
-                                                setState(() => {
-                                                      error =
-                                                          'please supply a valid email',
-                                                      loading = false,
-                                                    });
-                                                Navigator.pushNamed(
-                                                    context, '/login');
-                                              }
-                                            }
-                                          }),
+                                          child: PillButton(
+                                            "Register",
+                                            action: valid,
+                                          ),
                                         ),
                                       ],
                                     ),
