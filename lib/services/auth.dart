@@ -4,6 +4,7 @@ import 'package:amikoj/services/database.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 enum authProblems { UserNotFound, PasswordNotValid, NetworkError }
 
@@ -67,26 +68,22 @@ class AuthService {
     }
   }
 
-  Future loginWithFacebook() async {
+  Future<UserModule> signInWithFacebook() async {
     try {
-      final facebookLogin = FacebookLogin();
-      final FacebookLoginResult resultFacebook =
-          await facebookLogin.logIn(permissions: [
-        FacebookPermission.publicProfile,
-        FacebookPermission.email,
-      ]);
-      if (resultFacebook.status == FacebookLoginStatus.Success) {
-        final FacebookAccessToken token = resultFacebook.accessToken;
-        final AuthCredential fbCredential =
-            FacebookAuthProvider.credential(token.token);
-        print(token.token);
-        print('------------------fbcredential----------------------------');
-        print(fbCredential);
-        UserCredential result = await _auth.signInWithCredential(fbCredential);
-        return _userFromFireBaseUser(result.user);
-      }
-    } catch (e) {
+      final AccessToken result = await FacebookAuth.instance.login();
+      // Create a credential from the access token
+      final FacebookAuthCredential facebookAuthCredential =
+      FacebookAuthProvider.credential(result.token);
+
+      // Once signed in, return the UserCredential
+      UserCredential userCredential = await _auth.signInWithCredential(facebookAuthCredential);
+      User user = userCredential.user;
+      return _userFromFireBaseUser(user);
+    } on FacebookAuthException catch (e) {
+      print("FacebookAuthException");
       print(e.toString());
+      print(e.message);
+      print(e.errorCode);
       return null;
     }
   }

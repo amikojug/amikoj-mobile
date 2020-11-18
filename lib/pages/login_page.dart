@@ -1,5 +1,10 @@
 import 'package:amikoj/components/loading.dart';
+import 'package:amikoj/models/user_module.dart';
+import 'package:amikoj/redux/app_state.dart';
+import 'package:amikoj/redux/user_reducer.dart';
+import 'package:amikoj/services/storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shimmer/shimmer.dart';
@@ -194,8 +199,19 @@ class _LoginPageState extends State<LoginPage> {
                                                   color: Colors.white,
                                                   size: 40,
                                                 ),
-                                                onPressed: () {
-                                                  print("Pressed");
+                                                onPressed: () async {
+                                                  UserModule result = await _auth.signInWithFacebook();
+                                                  if (result == null) {
+                                                    print('error signing in');
+                                                  } else {
+                                                    print('signed in');
+                                                    String avatarUrl = await downloadUserAvatar(result.uid);
+                                                    if (avatarUrl != null) {
+                                                      StoreProvider.of<AppState>(context)
+                                                          .dispatch(UpdateUser(avatarUrl: avatarUrl));
+                                                    }
+                                                    Navigator.pushNamed(context, '/home');
+                                                  }
                                                 }),
                                             IconButton(
                                                 // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
