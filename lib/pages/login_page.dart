@@ -1,4 +1,4 @@
-import 'package:amikoj/pages/loading.dart';
+import 'package:amikoj/components/loading.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';

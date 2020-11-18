@@ -9,7 +9,7 @@ import 'package:amikoj/pages/home_page.dart';
 import 'package:amikoj/pages/create_room_page.dart';
 import 'package:amikoj/pages/join_room_page.dart';
 import 'package:amikoj/pages/account_page.dart';
-import 'package:amikoj/pages/room.dart';
+import 'package:amikoj/pages/room_page.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 

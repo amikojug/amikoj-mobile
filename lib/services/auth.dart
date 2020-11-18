@@ -1,4 +1,4 @@
-import 'package:amikoj/components/user_module.dart';
+import 'package:amikoj/models/user_module.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:amikoj/services/database.dart';
 import 'package:flutter/services.dart';

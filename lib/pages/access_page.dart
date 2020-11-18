@@ -1,4 +1,4 @@
-import 'package:amikoj/components/user_module.dart';
+import 'package:amikoj/models/user_module.dart';
 import 'package:amikoj/redux/app_state.dart';
 import 'package:amikoj/redux/user_reducer.dart';
 import 'package:amikoj/services/storage.dart';

@@ -1,8 +1,9 @@
+import 'package:amikoj/models/user_module.dart';
 import 'package:meta/meta.dart';
 
 @immutable
 class RoomState {
-  final List<String> players;
+  final List<UserModule> players;
 
   RoomState({@required this.players});
 
