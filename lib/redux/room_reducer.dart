@@ -1,3 +1,4 @@
+import 'package:amikoj/models/user_module.dart';
 import 'package:amikoj/redux/room_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:redux/redux.dart';
@@ -17,7 +18,7 @@ RoomState _resetRoom(RoomState state, ResetRoom action) {
  // Actions
 
 class UpdateRoom {
-  final List<String> players;
+  final List<UserModule> players;
   UpdateRoom({ this.players });
 }
 

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:amikoj/components/app_bar.dart';
-import 'package:amikoj/components/user_module.dart';
+import 'package:amikoj/models/user_module.dart';
 import 'package:amikoj/constants/room_action_type.dart';
 import 'package:amikoj/redux/app_state.dart';
 import 'package:amikoj/services/realtime_database.dart';
@@ -32,7 +32,7 @@ class RoomPage extends StatelessWidget {
     Map<String, dynamic> routeArgs = ModalRoute.of(context).settings.arguments;
     print(routeArgs);
     String roomName = routeArgs["roomName"];
-    createRoomSubscription(roomName);
+    createRoomSubscription(roomName, context);
     _createOrJoinRoom(context);
   }
 
