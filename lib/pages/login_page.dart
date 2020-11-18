@@ -200,9 +200,17 @@ class _LoginPageState extends State<LoginPage> {
                                                   size: 40,
                                                 ),
                                                 onPressed: () async {
+                                                  setState(() {
+                                                    loading = true;
+                                                  });
                                                   UserModule result = await _auth.signInWithFacebook();
                                                   if (result == null) {
                                                     print('error signing in');
+                                                    setState(() {
+                                                      error =
+                                                      'Could  not sign in with those credentials';
+                                                      loading = false;
+                                                    });
                                                   } else {
                                                     print('signed in');
                                                     String avatarUrl = await downloadUserAvatar(result.uid);
@@ -210,6 +218,9 @@ class _LoginPageState extends State<LoginPage> {
                                                       StoreProvider.of<AppState>(context)
                                                           .dispatch(UpdateUser(avatarUrl: avatarUrl));
                                                     }
+                                                  setState(() {
+                                                    loading = false;
+                                                    });
                                                     Navigator.pushNamed(context, '/home');
                                                   }
                                                 }),
@@ -224,6 +235,17 @@ class _LoginPageState extends State<LoginPage> {
                                                 onPressed: () {
                                                   print("Pressed");
                                                 }),
+                                            // IconButton(
+                                            //     // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+                                            //     icon: FaIcon(
+                                            //       FontAwesomeIcons
+                                            //           .instagramSquare,
+                                            //       color: Colors.white,
+                                            //       size: 40,
+                                            //     ),
+                                            //     onPressed: () {
+                                            //       print("Pressed");
+                                            //     }),
                                             IconButton(
                                                 // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
                                                 icon: FaIcon(
@@ -232,8 +254,24 @@ class _LoginPageState extends State<LoginPage> {
                                                   color: Colors.white,
                                                   size: 40,
                                                 ),
-                                                onPressed: () {
-                                                  print("Pressed");
+                                                onPressed: () async {
+                                                  setState(() {
+                                                    loading = true;
+                                                  });
+                                                  dynamic result = await _auth
+                                                      .loginWithGoogle();
+
+                                                  if (result == null) {
+                                                    print(result);
+                                                    setState(() {
+                                                      error =
+                                                          'Could  not sign in with those credentials';
+                                                      loading = false;
+                                                    });
+                                                  } else {
+                                                    Navigator.pushNamed(
+                                                        context, '/home');
+                                                  }
                                                 }),
                                           ],
                                         ),

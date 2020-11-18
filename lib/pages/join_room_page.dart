@@ -32,13 +32,16 @@ class _JoinRoomPageState extends State<JoinRoomPage> {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      appBar: AmikojAppBar(),
+    return Scaffold(
+      appBar: AmikojAppBar(context),
       backgroundColor: backgroundColor,
       body: Stack(
         alignment: Alignment.bottomCenter,
         children: <Widget>[
-          SvgPicture.asset('assets/images/background.svg', fit: BoxFit.cover,),
+          SvgPicture.asset(
+            'assets/images/background.svg',
+            fit: BoxFit.cover,
+          ),
           Center(
             child: Container(
                 alignment: Alignment.center,
@@ -49,7 +52,9 @@ class _JoinRoomPageState extends State<JoinRoomPage> {
                     Expanded(
                       child: Column(
                         children: <Widget>[
-                          Spacer(flex: 3,),
+                          Spacer(
+                            flex: 3,
+                          ),
                           PillInput("Room ID", roomIdTextController),
                           Spacer(),
                           PillButton("Join room",
@@ -68,8 +73,7 @@ class _JoinRoomPageState extends State<JoinRoomPage> {
                       ),
                     ),
                   ],
-                )
-            ),
+                )),
           )
         ],
       ),

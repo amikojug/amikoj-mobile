@@ -1,15 +1,20 @@
 import 'package:amikoj/models/user_module.dart';
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:amikoj/services/database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:http/http.dart' as http;
 
 enum authProblems { UserNotFound, PasswordNotValid, NetworkError }
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final fbLogin = FacebookLogin();
 
   UserModule _userFromFireBaseUser(User user) {
     return user != null ? UserModule(uid: user.uid) : null;
@@ -30,7 +35,7 @@ class AuthService {
       return _userFromFireBaseUser(user);
     } catch (e) {
       print(e.toString());
-      
+
       return null;
     }
   }
@@ -114,7 +119,7 @@ class AuthService {
     try {
       return await _auth.signOut();
     } catch (e) {
-      print(e.toString());
+      print('error  ' + e.toString());
       return null;
     }
   }

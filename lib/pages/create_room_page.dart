@@ -31,8 +31,8 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      appBar: AmikojAppBar(),
+    return Scaffold(
+      appBar: AmikojAppBar(context),
       backgroundColor: backgroundColor,
       body: GestureDetector(
         onTap: () {
@@ -41,7 +41,10 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: <Widget>[
-            SvgPicture.asset('assets/images/background.svg', fit: BoxFit.cover,),
+            SvgPicture.asset(
+              'assets/images/background.svg',
+              fit: BoxFit.cover,
+            ),
             Center(
               child: Container(
                   alignment: Alignment.center,
@@ -52,7 +55,9 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
                       Expanded(
                         child: Column(
                           children: <Widget>[
-                            Spacer(flex: 3,),
+                            Spacer(
+                              flex: 3,
+                            ),
                             PillInput("Room Name", roomNameTextController),
                             Spacer(),
                             PillButton("Create room",
@@ -63,14 +68,18 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
                               },
                             ),
                             Spacer(),
-                            PillButton("Back", redirect: "/home",),
-                            Spacer(flex: 3,),
+                            PillButton(
+                              "Back",
+                              redirect: "/home",
+                            ),
+                            Spacer(
+                              flex: 3,
+                            ),
                           ],
                         ),
                       ),
                     ],
-                  )
-              ),
+                  )),
             )
           ],
         ),
