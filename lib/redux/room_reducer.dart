@@ -9,17 +9,23 @@ final roomReducer = combineReducers<RoomState>([
 ]);
 
 RoomState _updateRoom(RoomState state, UpdateRoom action) {
-  return new RoomState(players: action.players);
+  return new RoomState(
+      players: action.players,
+      roomName: action.roomName,
+      hostId: action.hostId,
+  );
 }
 
 RoomState _resetRoom(RoomState state, ResetRoom action) {
   return RoomState.initial();
 }
- // Actions
+// Actions
 
 class UpdateRoom {
   final List<UserModule> players;
-  UpdateRoom({ this.players });
+  final String roomName;
+  final String hostId;
+  UpdateRoom({ this.players, this.roomName, this.hostId });
 }
 
 class ResetRoom {

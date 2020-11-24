@@ -8,7 +8,28 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class PlayerGrid extends StatelessWidget {
 
-  Widget playerCard(String avatarUrl) {
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, RoomState>(
+        rebuildOnChange: true,
+        converter: (store) => store.state.roomState,
+        builder: (context, state) {
+          return Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(36), bottomRight: Radius.circular(36)),
+              child: GridView.count(
+                  childAspectRatio: 6,
+                  crossAxisCount: 1,
+                  padding: const EdgeInsets.all(4.0),
+                  children: getCards(state)
+              ),
+            ),
+          );
+        }
+    );
+  }
+
+  Widget playerCard(UserModule player, bool isHost) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       child: Container(
@@ -28,10 +49,11 @@ class PlayerGrid extends StatelessWidget {
                     shape: BoxShape.circle,
                     image: new DecorationImage(
                         fit: BoxFit.fill,
-                        image: new NetworkImage(avatarUrl),
+                        image: new NetworkImage(player.avatarUrl),
                     )
                 )),
-            Text("AAA", style: whiteText),
+            Text(player.name, style: whiteText),
+            isHost ?
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: FaIcon(
@@ -40,37 +62,22 @@ class PlayerGrid extends StatelessWidget {
                 color: Colors.white,
                 size: 20,
               ),
-            )
+            ) :
+                Container(width: 38,)
           ],
         ),
       ),
     );
   }
 
-
-  @override
-  Widget build(BuildContext context) {
-    return StoreConnector<AppState, RoomState>(
-      rebuildOnChange: true,
-      converter: (store) => store.state.roomState,
-      builder: (context, state) {
-        return Expanded(
-          child: ClipRRect(
-            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(36), bottomRight: Radius.circular(36)),
-            child: GridView.count(
-              childAspectRatio: 6,
-              crossAxisCount: 1,
-              padding: const EdgeInsets.all(4.0),
-              children: getCards(state.players)
-            ),
-          ),
-        );
-      }
-    );
+  List<Widget> getCards(RoomState roomState) {
+    List<Widget> widgets = roomState.players.map(
+            (e) => playerCard(e, isHostPlayer(roomState, e))).toList();
+    return widgets;
   }
 
-  List<Widget> getCards(List<UserModule> users) {
-    List<Widget> widgets = users.map((e) => playerCard(e.avatarUrl)).toList();
-    return widgets;
+  bool isHostPlayer(RoomState roomState, UserModule player) {
+    print('AAAA ${roomState.hostId} ${player.uid}');
+    return roomState.hostId == player.uid;
   }
 }

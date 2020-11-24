@@ -26,23 +26,28 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return new StoreProvider<AppState>(
       store: store,
-      child: MaterialApp(
-        title: 'Amikoj',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        initialRoute: '/',
-        routes: {
-          '/': (context) => AccessPage(),
-          '/login': (context) => LoginPage(),
-          '/register': (context) => RegisterPage(),
-          '/home': (context) => HomePage(),
-          '/createRoom': (context) => CreateRoomPage(),
-          '/joinRoom': (context) => JoinRoomPage(),
-          '/room': (context) => RoomPage(),
-          '/account': (context) => AccountPage(),
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
         },
+        child: MaterialApp(
+          title: 'Amikoj',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          initialRoute: '/',
+          routes: {
+            '/': (context) => AccessPage(),
+            '/login': (context) => LoginPage(),
+            '/register': (context) => RegisterPage(),
+            '/home': (context) => HomePage(),
+            '/createRoom': (context) => CreateRoomPage(),
+            '/joinRoom': (context) => JoinRoomPage(),
+            '/room': (context) => RoomPage(),
+            '/account': (context) => AccountPage(),
+          },
+        ),
       ),
     );
   }

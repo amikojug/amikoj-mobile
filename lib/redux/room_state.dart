@@ -4,16 +4,18 @@ import 'package:meta/meta.dart';
 @immutable
 class RoomState {
   final List<UserModule> players;
+  final String roomName;
+  final String hostId;
 
-  RoomState({@required this.players});
+  RoomState({@required this.players, @required this.roomName, @required this.hostId});
 
   static RoomState initial() {
-    return new RoomState(players: new List());
+    return new RoomState(players: new List(), roomName: "", hostId: "");
   }
 
   @override
   String toString() {
-    return 'RoomState: {avatarUrl: $players}';
+    return 'RoomState: {avatarUrl: $players} {roomName: $roomName} {hostId: $hostId}';
   }
 
   @override

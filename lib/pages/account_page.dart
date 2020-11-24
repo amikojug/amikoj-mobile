@@ -1,9 +1,12 @@
 import 'dart:ui';
 
+import 'package:amikoj/components/pill_button.dart';
+import 'package:amikoj/components/pill_input.dart';
 import 'package:amikoj/redux/app_state.dart';
 import 'package:amikoj/redux/user_reducer.dart';
 import 'package:amikoj/redux/user_state.dart';
 import 'package:amikoj/services/auth.dart';
+import 'package:amikoj/services/realtime_database.dart';
 import 'package:amikoj/services/storage.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -25,6 +28,19 @@ class AccountPage extends StatefulWidget {
 class _AccountPageState extends State<AccountPage> {
   File _image;
   final AuthService _auth = AuthService();
+  final userNameTextController = TextEditingController();
+
+  String userNameText = "";
+
+  @override
+  void initState() {
+    super.initState();
+    userNameTextController.addListener(() {
+      setState(() {
+        userNameText = userNameTextController.text;
+      });
+    });
+  }
 
   Future getImage(BuildContext context) async {
     var pickedFile = await new ImagePicker()
@@ -36,6 +52,7 @@ class _AccountPageState extends State<AccountPage> {
     var user = _auth.getCurrentUser();
     String url = await uploadUserAvatar(croppedImage, user.uid);
     StoreProvider.of<AppState>(context).dispatch(UpdateUser(avatarUrl: url));
+    updateYourselfInTheRoom();
     setState(() {
       _image = croppedImage;
     });
@@ -48,14 +65,30 @@ class _AccountPageState extends State<AccountPage> {
       converter: (store) => store.state.userState,
       builder: (context, state) {
         return new Scaffold(
+          backgroundColor: Color(0xFFBB81F6),
           appBar: AmikojAppBar(context),
-          body: new Center(
-            child: _image == null
-                ? new Text('No image selected.')
-                : new CircleAvatar(
-                    backgroundImage: new FileImage(_image),
-                    radius: 200.0,
-                  ),
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Center(
+                child: _image == null
+                    ? new Text('No image selected.')
+                    : new CircleAvatar(
+                  backgroundImage: new FileImage(_image),
+                  radius: 200.0,
+                ),
+              ),
+              Spacer(flex: 2,),
+              PillInput("User Name", userNameTextController),
+              Spacer(flex: 1,),
+              PillButton("Save", action: () {
+                StoreProvider.of<AppState>(context)
+                    .dispatch(UpdateUserName(name: userNameText));
+                updateYourselfInTheRoom();
+                Navigator.pop(context);
+              },),
+              Spacer(flex: 1,),
+            ],
           ),
           floatingActionButton: new FloatingActionButton(
             onPressed: () {

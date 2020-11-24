@@ -25,7 +25,7 @@ class PillButton extends StatelessWidget {
           onPressed: () async {
             if (this.redirect != null)
               Navigator.pushNamed(context, this.redirect, arguments: this.redirectArgument);
-            else if (this.action != null) action();
+            if (this.action != null) action();
           },
           child: Text(
             this.text,

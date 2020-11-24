@@ -9,14 +9,14 @@ import 'package:amikoj/redux/user_state.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:amikoj/services/auth.dart';
 
-PreferredSizeWidget AmikojAppBar(context) {
+PreferredSizeWidget AmikojAppBar(BuildContext context) {
   final AuthService _auth = AuthService();
 
   return AppBar(
     backgroundColor: Color(0xFFBB81F6),
     leading: FlatButton(
       onPressed: () async {
-        await _auth.signOut();
+        await _auth.signOut(context);
         Navigator.popUntil(context, (route) => route.isFirst);
       },
       child: Icon(Icons.logout, color: Colors.white),
@@ -26,6 +26,8 @@ PreferredSizeWidget AmikojAppBar(context) {
           rebuildOnChange: true,
           converter: (store) => store.state.userState,
           builder: (context, state) {
+            print("KKKKKKKJJJJJJJJJJJ");
+            print(state.name);
             return FlatButton(
               color: Colors.transparent,
               onPressed: () {
@@ -34,7 +36,7 @@ PreferredSizeWidget AmikojAppBar(context) {
               child: Row(
                 children: [
                   Text(
-                    "Best name",
+                    state.name,
                     style: whiteText,
                   ),
                   Padding(
