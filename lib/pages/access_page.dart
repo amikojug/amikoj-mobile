@@ -50,6 +50,8 @@ class AccessPage extends StatelessWidget {
                                   StoreProvider.of<AppState>(context)
                                       .dispatch(UpdateUser(avatarUrl: avatarUrl));
                                 }
+                                StoreProvider.of<AppState>(context)
+                                    .dispatch(UpdateUserUid(uid: result.uid));
                                 Navigator.pushNamed(context, '/home');
                               }
                             },
