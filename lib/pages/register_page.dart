@@ -102,6 +102,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    double _width = MediaQuery.of(context).size.width;
+    double _height = MediaQuery.of(context).size.height;
     return loading
         ? Loading()
         : Scaffold(
@@ -124,9 +126,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               ? MainAxisAlignment.spaceBetween
                               : MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Spacer(
-                              flex: 2,
-                            ),
+                            !_keyboardIsVisible() ? Spacer(flex: 3) : SizedBox(height: _height*0.17),
                             Expanded(
                               flex: 4,
                               child: Column(
@@ -308,5 +308,9 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             ),
           );
+  }
+
+  bool _keyboardIsVisible() {
+    return !(MediaQuery.of(context).viewInsets.bottom == 0.0);
   }
 }
