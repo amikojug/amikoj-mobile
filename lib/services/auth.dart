@@ -79,13 +79,14 @@ class AuthService {
 
   Future<UserModule> signInWithFacebook() async {
     try {
+      FacebookAuth.instance.logOut();
       final AccessToken result = await FacebookAuth.instance.login();
       // Create a credential from the access token
       final FacebookAuthCredential facebookAuthCredential =
-      FacebookAuthProvider.credential(result.token);
-
+          FacebookAuthProvider.credential(result.token);
       // Once signed in, return the UserCredential
-      UserCredential userCredential = await _auth.signInWithCredential(facebookAuthCredential);
+      UserCredential userCredential =
+          await _auth.signInWithCredential(facebookAuthCredential);
       User user = userCredential.user;
       return _userFromFireBaseUser(user);
     } on FacebookAuthException catch (e) {

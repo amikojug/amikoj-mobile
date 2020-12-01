@@ -199,6 +199,8 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
                     loading = true;
                   });
                   UserModule result = await _auth.signInWithFacebook();
+                  print('------------------result');
+                  print(result);
                   if (result == null) {
                     print('error signing in');
                     setState(() {
@@ -219,17 +221,17 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
                     Navigator.pushNamed(context, '/home');
                   }
                 }),
-            IconButton(
-              // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-                icon: FaIcon(
-                  FontAwesomeIcons
-                      .instagramSquare,
-                  color: Colors.white,
-                  size: 40,
-                ),
-                onPressed: () {
-                  print("Pressed");
-                }),
+            // IconButton(
+            //   // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+            //     icon: FaIcon(
+            //       FontAwesomeIcons
+            //           .instagramSquare,
+            //       color: Colors.white,
+            //       size: 40,
+            //     ),
+            //     onPressed: () {
+            //       print("Pressed");
+            //     }),
             IconButton(
               // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
                 icon: FaIcon(
