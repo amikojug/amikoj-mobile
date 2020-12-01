@@ -16,6 +16,8 @@ class PillInput extends StatelessWidget {
   }) : super(key: key);
 
   Widget build(BuildContext context) {
+    double _width = MediaQuery.of(context).size.width;
+    double _height = MediaQuery.of(context).size.height;
     print(validator);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20),
@@ -25,13 +27,13 @@ class PillInput extends StatelessWidget {
           controller: textEditingController,
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 28.0,
+            fontSize: _width*0.05,
             color: Colors.white,
             fontWeight: FontWeight.w500,
           ),
           decoration: InputDecoration(
             errorStyle: TextStyle(
-              fontSize: 18.0,
+              fontSize: _width*0.05,
               color: Colors.black,
               fontWeight: FontWeight.w500,
             ),
@@ -42,7 +44,7 @@ class PillInput extends StatelessWidget {
             ),
             filled: true,
             fillColor: Colors.transparent,
-            contentPadding: EdgeInsets.all(19.0),
+            contentPadding: EdgeInsets.all(_width*0.1 / 3),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(36)),
               borderSide: BorderSide(width: 4, color: Colors.white),

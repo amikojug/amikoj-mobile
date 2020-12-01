@@ -50,6 +50,8 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    double _width = MediaQuery.of(context).size.width;
+    double _height = MediaQuery.of(context).size.height;
     return loading
         ? Loading()
         : Scaffold(
@@ -68,7 +70,8 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
                             ? MainAxisAlignment.spaceBetween
                             : MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          Spacer(flex: 1),
+                          // Spacer(flex: 1),
+                          !_keyboardIsVisible() ? SizedBox(height: _height*0.42) : SizedBox(height: _height*0.2,),
                           Expanded(
                             child: Column(
                               mainAxisAlignment:
@@ -78,7 +81,7 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
                                   error,
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 20.0,
+                                    fontSize: _width*0.05,
                                   ),
                                 ),
                                 Spacer(
@@ -130,6 +133,8 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
   }
 
   Widget otherConnections() {
+    double _width = MediaQuery.of(context).size.width;
+    double _height = MediaQuery.of(context).size.height;
     return Column(
       children: <Widget>[
         Padding(
@@ -147,7 +152,7 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
                 child: Text(
                   "Back",
                   style: TextStyle(
-                    fontSize: 20.0,
+                    fontSize: _width*0.06,
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
                   ),
@@ -161,7 +166,7 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
                 child: Text(
                   "Register",
                   style: TextStyle(
-                    fontSize: 20.0,
+                    fontSize: _width*0.06,
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
                   ),
@@ -176,7 +181,7 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
           child: Text(
             "Or connect with:",
             style: TextStyle(
-              fontSize: 20.0,
+              fontSize: _width*0.06,
               color: Colors.white,
               fontWeight: FontWeight.w500,
             ),
@@ -192,7 +197,7 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
                   FontAwesomeIcons
                       .facebookSquare,
                   color: Colors.white,
-                  size: 40,
+                  size: _width*0.1,
                 ),
                 onPressed: () async {
                   setState(() {
@@ -238,7 +243,7 @@ class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
                   FontAwesomeIcons
                       .googlePlusSquare,
                   color: Colors.white,
-                  size: 40,
+                  size: _width*0.1,
                 ),
                 onPressed: () async {
                   setState(() {
