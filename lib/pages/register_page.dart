@@ -148,7 +148,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                           loginTextController,
                                           validator: (val) {
                                             print('email ' + val);
-                                            // val.isEmpty ? 'Enter email' : null;
                                             if (val.isEmpty) {
                                               return 'Enter email';
                                             } else if (!validEmail(
@@ -227,74 +226,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                                   ),
                                                 ),
                                               ),
-                                              // GestureDetector(
-                                              //   onTap: () {
-                                              //     Navigator.pushNamed(
-                                              //         context, '/login');
-                                              //   },
-                                              // child: Text(
-                                              //   "Play as guest",
-                                              //   style: TextStyle(
-                                              //     fontSize: 20.0,
-                                              //     color: Colors.white,
-                                              //     fontWeight: FontWeight.w500,
-                                              //   ),
-                                              // ),
-                                              // ),
                                             ],
                                           ),
                                         ),
-                                        // Padding(
-                                        //   padding:
-                                        //       const EdgeInsets.only(top: 8.0),
-                                        //   child: Text(
-                                        //     "Or connect with:",
-                                        //     style: TextStyle(
-                                        //       fontSize: 20.0,
-                                        //       color: Colors.white,
-                                        //       fontWeight: FontWeight.w500,
-                                        //     ),
-                                        //   ),
-                                        // ),
-                                        // Row(
-                                        //   mainAxisAlignment:
-                                        //       MainAxisAlignment.center,
-                                        //   children: [
-                                        //     IconButton(
-                                        //         // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-                                        //         icon: FaIcon(
-                                        //           FontAwesomeIcons
-                                        //               .facebookSquare,
-                                        //           color: Colors.white,
-                                        //           size: 40,
-                                        //         ),
-                                        //         onPressed: () {
-                                        //           print("Pressed");
-                                        //         }),
-                                        //     IconButton(
-                                        //         // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-                                        //         icon: FaIcon(
-                                        //           FontAwesomeIcons
-                                        //               .instagramSquare,
-                                        //           color: Colors.white,
-                                        //           size: 40,
-                                        //         ),
-                                        //         onPressed: () {
-                                        //           print("Pressed");
-                                        //         }),
-                                        //     IconButton(
-                                        //         // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-                                        //         icon: FaIcon(
-                                        //           FontAwesomeIcons
-                                        //               .googlePlusSquare,
-                                        //           color: Colors.white,
-                                        //           size: 40,
-                                        //         ),
-                                        //         onPressed: () {
-                                        //           print("Pressed");
-                                        //         }),
-                                        //   ],
-                                        // ),
                                       ],
                                     ),
                                   Spacer()

@@ -2,6 +2,7 @@ import 'package:amikoj/constants/constants.dart';
 import 'package:amikoj/models/user_module.dart';
 import 'package:amikoj/redux/app_state.dart';
 import 'package:amikoj/redux/room_state.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -42,16 +43,19 @@ class PlayerGrid extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Container(
-                width: 44.0,
-                height: double.infinity,
-                decoration: new BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: new DecorationImage(
-                        fit: BoxFit.fill,
-                        image: new NetworkImage(player.avatarUrl),
-                    )
-                )),
+            ClipOval(
+              child: CachedNetworkImage(
+                key: Key(player.avatarUrl),
+                width: 44,
+                height: 44,
+                fit: BoxFit.cover,
+                imageUrl: player.avatarUrl,
+                placeholder: (context, url) =>
+                    CircularProgressIndicator(),
+                errorWidget: (context, url, error) =>
+                    CircularProgressIndicator(),
+              ),
+            ),
             Text(player.name, style: whiteText),
             isHost ?
             Padding(

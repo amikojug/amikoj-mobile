@@ -1,3 +1,4 @@
+import 'package:amikoj/pages/round_page.dart';
 import 'package:amikoj/redux/app_reducer.dart';
 import 'package:amikoj/redux/app_state.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +47,7 @@ class App extends StatelessWidget {
             '/joinRoom': (context) => JoinRoomPage(),
             '/room': (context) => RoomPage(),
             '/account': (context) => AccountPage(),
+            '/round': (context) => RoundPage(),
           },
         ),
       ),
