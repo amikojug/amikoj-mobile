@@ -161,7 +161,7 @@ class RoomPage extends StatelessWidget {
         baseColor: Colors.white,
         highlightColor: Color(0x22FFFFFF),
         child:
-        PillButton("Start", redirect: "/home",),
+        PillButton("Start", redirect: "/round",),
       );
     }
     return PillButton("Ready", action: () async {
