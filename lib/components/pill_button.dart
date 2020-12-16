@@ -11,9 +11,9 @@ class PillButton extends StatelessWidget {
 
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width;
-    double _height = MediaQuery.of(context).size.height;
+    // double _height = MediaQuery.of(context).size.height;
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: _width*0.05),
+      padding: EdgeInsets.symmetric(horizontal: _width * 0.05),
       child: Container(
         decoration: BoxDecoration(color: Colors.transparent, boxShadow: []),
         child: FlatButton(
@@ -22,17 +22,18 @@ class PillButton extends StatelessWidget {
               side: BorderSide(color: Colors.white, width: 4)),
           color: Colors.transparent,
           textColor: Colors.white,
-          padding: EdgeInsets.all(_width*0.1 / 2.5 ),
+          padding: EdgeInsets.all(_width * 0.1 / 2.5),
           minWidth: double.infinity,
           onPressed: () async {
             if (this.redirect != null)
-              Navigator.pushNamed(context, this.redirect, arguments: this.redirectArgument);
+              Navigator.pushNamed(context, this.redirect,
+                  arguments: this.redirectArgument);
             if (this.action != null) action();
           },
           child: Text(
             this.text,
             style: TextStyle(
-              fontSize: _width*0.07,
+              fontSize: _width * 0.07,
             ),
           ),
         ),
