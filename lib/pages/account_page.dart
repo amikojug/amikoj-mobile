@@ -16,7 +16,6 @@ import 'package:amikoj/constants/constants.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:redux/redux.dart';
 import 'package:amikoj/components/app_bar.dart';
 
