@@ -126,7 +126,9 @@ class _RegisterPageState extends State<RegisterPage> {
                               ? MainAxisAlignment.spaceBetween
                               : MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            !_keyboardIsVisible() ? Spacer(flex: 3) : SizedBox(height: _height*0.17),
+                            !_keyboardIsVisible()
+                                ? Spacer(flex: 3)
+                                : SizedBox(height: _height * 0.17),
                             Expanded(
                               flex: 4,
                               child: Column(
@@ -159,7 +161,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           },
                                         ),
 
-                                        SizedBox(height: 6.0),
+                                        SizedBox(height: _height * 0.015),
                                         // Spacer(),
                                         PillInput(
                                             "Password", passwordTextController,
@@ -170,7 +172,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             return null;
                                           }
                                         }, obscureText: true),
-                                        SizedBox(height: 6.0),
+                                        SizedBox(height: _height * 0.015),
                                         // Spacer(),
                                         PillInput(
                                           "Confirm Password",
@@ -187,7 +189,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             }
                                           },
                                         ),
-                                        SizedBox(height: 6.0),
+                                        SizedBox(height: _height * 0.015),
                                         // Spacer(),
                                         Shimmer.fromColors(
                                           enabled: isInputValid(),
@@ -220,7 +222,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                                 child: Text(
                                                   "Back",
                                                   style: TextStyle(
-                                                    fontSize: 20.0,
+                                                    fontSize: _width * 0.05,
                                                     color: Colors.white,
                                                     fontWeight: FontWeight.w500,
                                                   ),
