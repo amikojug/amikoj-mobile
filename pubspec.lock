@@ -310,13 +310,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.2"
-  hexcolor:
-    dependency: "direct main"
-    description:
-      name: hexcolor
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.4"
   http:
     dependency: "direct main"
     description:
@@ -581,20 +574,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0-nullsafety.1"
-  stagexl:
-    dependency: "direct main"
-    description:
-      name: stagexl
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.4.6"
-  stagexl_particle:
-    dependency: "direct main"
-    description:
-      name: stagexl_particle
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.1"
   stream_channel:
     dependency: transitive
     description:
