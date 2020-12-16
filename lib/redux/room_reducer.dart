@@ -1,6 +1,5 @@
 import 'package:amikoj/models/user_module.dart';
 import 'package:amikoj/redux/room_state.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:redux/redux.dart';
 
 final roomReducer = combineReducers<RoomState>([
@@ -9,11 +8,13 @@ final roomReducer = combineReducers<RoomState>([
 ]);
 
 RoomState _updateRoom(RoomState state, UpdateRoom action) {
-  return new RoomState(
-      players: action.players,
-      roomName: action.roomName,
-      hostId: action.hostId,
-  );
+  return RoomState.fromJson({
+    ...state.toJson(),
+    'players': action.players,
+    'roomName': action.roomName,
+    'hostId': action.hostId,
+    'currentQuestionId': action.currentQuestionId
+  });
 }
 
 RoomState _resetRoom(RoomState state, ResetRoom action) {
@@ -25,7 +26,8 @@ class UpdateRoom {
   final List<UserModule> players;
   final String roomName;
   final String hostId;
-  UpdateRoom({ this.players, this.roomName, this.hostId });
+  final String currentQuestionId;
+  UpdateRoom({ this.players, this.roomName, this.hostId, this.currentQuestionId });
 }
 
 class ResetRoom {

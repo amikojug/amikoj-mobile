@@ -1,5 +1,6 @@
 library constants;
 
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -10,3 +11,14 @@ const TextStyle whiteText = const TextStyle(
   color: Colors.white,
   fontWeight: FontWeight.w500,
 );
+
+List<dynamic> questions;
+
+List<dynamic> getQuestions() {
+  return questions;
+}
+
+void initQuestions(BuildContext context) async {
+  String data = await DefaultAssetBundle.of(context).loadString("assets/data/questions.json");
+  questions = json.decode(data)['questions'];
+}

@@ -7,7 +7,7 @@ final userReducer = combineReducers<UserState>([
   TypedReducer<UserState, UpdateUserName>(_updateUserName),
   TypedReducer<UserState, UpdateUserReadiness>(_updateUserReadiness),
   TypedReducer<UserState, ResetUser>(_resetUser),
-
+  TypedReducer<UserState, UpdateUserSelectedAnswer>(_updateUserSelectedAnswer),
 ]);
 
 UserState _updateUser(UserState state, UpdateUser action) {
@@ -28,6 +28,13 @@ UserState _updateUserReadiness(UserState state, UpdateUserReadiness action) {
   return UserState.fromJson({
     ...state.toJson(),
     "isReady": action.isReady,
+  });
+}
+
+UserState _updateUserSelectedAnswer(UserState state, UpdateUserSelectedAnswer action) {
+  return UserState.fromJson({
+    ...state.toJson(),
+    "selectedAnswer": action.selectedAnswer,
   });
 }
 
@@ -61,6 +68,11 @@ class UpdateUserName {
 class UpdateUserReadiness {
   final bool isReady;
   UpdateUserReadiness({this.isReady});
+}
+
+class UpdateUserSelectedAnswer {
+  final String selectedAnswer;
+  UpdateUserSelectedAnswer({this.selectedAnswer});
 }
 
 class ResetUser {

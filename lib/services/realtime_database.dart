@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:io' show Platform;
+import 'dart:math';
 import 'package:amikoj/app.dart';
+import 'package:amikoj/constants/constants.dart';
 import 'package:amikoj/models/user_module.dart';
 import 'package:amikoj/redux/app_state.dart';
 import 'package:amikoj/redux/room_reducer.dart';
+import 'package:amikoj/redux/user_reducer.dart';
 import 'package:amikoj/services/auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +16,33 @@ import 'package:redux/redux.dart';
 DatabaseReference _roomRef = FirebaseDatabase.instance.reference().child('rooms');
 StreamSubscription<Event> _roomSubscription;
 final AuthService _auth = AuthService();
+
+Future changeQuestion(BuildContext ctx) async {
+  Store<AppState> s = getStore();
+  String roomId = s.state.roomState.roomName;
+  if (roomId == null) {
+    return;
+  }
+  updateRoom(roomId, (val) {
+    var rng = new Random();
+    List<dynamic> players = List<dynamic>.of(val['players']);
+    print("AAAAAAQGGG");
+    print(players);
+    players.forEach((player) {
+      player['selectedAnswer'] = null;
+    });
+    Map<String, dynamic> data = {
+      ...val,
+      "players": players,
+      "currentQuestionId": rng.nextInt(getQuestions().length)
+    };
+    return data;
+  });
+  StoreProvider.of<AppState>(ctx)
+      .dispatch(UpdateUserSelectedAnswer(
+      selectedAnswer: null
+  ));
+}
 
 Future removeYourselfFromRoom() async {
   UserModule currentUser = _auth.getCurrentUser();
@@ -112,11 +142,13 @@ void createRoomSubscription(String roomName, BuildContext context) {
     onUpdate: (value) {
       print("qqqqqqqqqq1");
       print(Map<String, dynamic>.from(value)['hostId']);
+      Map<String, dynamic> room = Map<String, dynamic>.from(value);
       StoreProvider.of<AppState>(context)
           .dispatch(UpdateRoom(
-          players: usersFromJson(Map<String, dynamic>.from(value)),
+          players: usersFromJson(room),
           roomName: roomName,
-          hostId: Map<String, dynamic>.from(value)['hostId'],
+          hostId: room['hostId'],
+          currentQuestionId: room['currentQuestionId'].toString()
       ));
       print('KKKKKK $value');
     }

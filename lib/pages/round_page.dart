@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:amikoj/components/app_bar.dart';
 import 'package:amikoj/redux/room_state.dart';
+import 'package:amikoj/redux/user_state.dart';
+import 'package:amikoj/services/realtime_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:amikoj/models/user_module.dart';
 import 'package:amikoj/redux/app_state.dart';
@@ -17,14 +21,13 @@ import '../constants/constants.dart';
 class RoundPage extends StatefulWidget {
   @override
   _RoundPageState createState() => _RoundPageState();
-
 }
 
 class _RoundPageState extends State<RoundPage> {
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, RoomState>(
-        converter: (store) => store.state.roomState,
+    return StoreConnector<AppState, AppState>(
+        converter: (store) => store.state,
         builder: (context, state) {
           return Scaffold(
             appBar: AmikojAppBar(context),
@@ -72,7 +75,7 @@ class _RoundPageState extends State<RoundPage> {
                                                     const EdgeInsets.symmetric(
                                                         vertical: 10),
                                                     child: Text(
-                                                      state.roomName,
+                                                      state.roomState.roomName,
                                                       style: TextStyle(
                                                         fontSize: 20.0,
                                                         color: Colors.white,
@@ -97,7 +100,7 @@ class _RoundPageState extends State<RoundPage> {
                                                       const EdgeInsets.symmetric(
                                                           vertical: 10),
                                                       child: Text(
-                                                        "W środku nocy budzi Cię głośna muzyka dobiegająca z mieszkania sąsiada. Co robisz?",
+                                                        getQuestions()[getQuestionNumber(state.roomState)]['question'],
                                                         style: whiteText,
                                                         textAlign: TextAlign.center,
                                                       ),
@@ -111,12 +114,16 @@ class _RoundPageState extends State<RoundPage> {
                                                 height: 0,
                                               ),
                                               Expanded(
-                                                child: ListView(children: getAnswerCards(),),
+                                                child: ListView(children: getAnswerCards(context, state.userState, state.roomState)),
                                               )
                                             ],
                                           )),
                                     )),
                                 Spacer(),
+                                PillButton("Next Question", action: () {
+                                  print("KKK1");
+                                  changeQuestion(context);
+                                },),
                                 Spacer(),
                               ],
                             ),
@@ -131,17 +138,20 @@ class _RoundPageState extends State<RoundPage> {
     );
   }
 
-  Widget answerCard(String answer) {
+  Widget answerCard(String key, String answer, BuildContext ctx, bool isSelected) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       child: Container(
         decoration: BoxDecoration(
+          color: isSelected ? Color(0xAA440044) : null,
           borderRadius: BorderRadius.circular(360),
           border: Border.all(color: Colors.white, width: 1),
         ),
         child: FlatButton(
           onPressed: () {
-            print("Asas");
+            StoreProvider.of<AppState>(ctx)
+                .dispatch(UpdateUserSelectedAnswer(selectedAnswer: key));
+            updateYourselfInTheRoom();
           },
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(360.0),
@@ -171,9 +181,18 @@ class _RoundPageState extends State<RoundPage> {
     );
   }
 
-  List<Widget> getAnswerCards() {
-    List<Widget> widgets = ["asasasd saaaaaaaaaaaaa sssssssssssssss sssssssssssssssssssssss ssssssssssss sssssssssss ssssssssssss sssssssssssss sssssssssssssq", "dfewsadasd asdasdasdasda  asda dasd asdasdasdasdasdasda asdasdasdasdasdas sajhabjsb ajshbajshba sjhasbjahsb", "wqweqweq"]
-        .map((answer) => answerCard(answer)).toList();
+  int getQuestionNumber(RoomState roomState) {
+    try {
+      return int.parse(roomState.currentQuestionId);
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  List<Widget> getAnswerCards(BuildContext ctx, UserState userState, RoomState roomState) {
+    List<Widget> widgets = [];
+    getQuestions()[getQuestionNumber(roomState)]['answers']
+        .forEach((key, value) => widgets.add(answerCard(key, value, ctx, userState.selectedAnswer == key)));
     return widgets;
   }
 }
