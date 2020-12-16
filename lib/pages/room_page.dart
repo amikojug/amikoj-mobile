@@ -28,9 +28,11 @@ class RoomPage extends StatelessWidget {
     Map<String, dynamic> routeArgs = ModalRoute.of(context).settings.arguments;
     if (routeArgs["type"] == RoomAction.create) {
       initRoom(routeArgs["roomName"]);
+      changeQuestion(context);
     } else if (routeArgs["type"] == RoomAction.join) {
       addYourselfToTheRoom(routeArgs["roomName"]);
     }
+    updateYourselfInTheRoom();
   }
 
   void _createRoomSubscription(BuildContext context) {

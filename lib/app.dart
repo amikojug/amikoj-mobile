@@ -14,6 +14,8 @@ import 'package:amikoj/pages/room_page.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
+import 'constants/constants.dart';
+
 final Store<AppState> store = Store<AppState>(appReducer,
     initialState: AppState.initialState());
 
@@ -25,6 +27,7 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    initQuestions(context);
     return new StoreProvider<AppState>(
       store: store,
       child: GestureDetector(

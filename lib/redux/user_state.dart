@@ -6,14 +6,22 @@ class UserState {
   final String avatarUrl;
   final String name;
   final bool isReady;
+  final String selectedAnswer;
 
-  UserState({@required this.uid, @required this.avatarUrl, @required this.name, @required this.isReady});
+  UserState({
+    @required this.uid,
+    @required this.avatarUrl,
+    @required this.name,
+    @required this.isReady,
+    @required this.selectedAnswer,
+  });
 
   UserState.fromJson(Map<String, dynamic> json)
       : name = json['name'],
         avatarUrl = json['avatarUrl'],
         isReady = json['isReady'],
-        uid = json['uid'];
+        uid = json['uid'],
+        selectedAnswer = json['selectedAnswer'];
 
   Map<String, dynamic> toJson() =>
       {
@@ -21,6 +29,7 @@ class UserState {
         'avatarUrl': avatarUrl,
         'isReady': isReady,
         'uid': uid,
+        'selectedAnswer': selectedAnswer
       };
 
   static UserState initial() {
@@ -29,12 +38,13 @@ class UserState {
         name: "Best name",
         isReady: false,
         uid: "",
+        selectedAnswer: null
     );
   }
 
   @override
   String toString() {
-    return 'UserState: {avatarUrl: $avatarUrl} {name: $name} {isReady: $isReady} {uid: $uid}';
+    return 'UserState: {avatarUrl: $avatarUrl} {name: $name} {isReady: $isReady} {uid: $uid} {selectedAnswer: $selectedAnswer}';
   }
 
   @override
