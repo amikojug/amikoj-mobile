@@ -7,6 +7,8 @@ class UserState {
   final String name;
   final bool isReady;
   final String selectedAnswer;
+  final dynamic command;
+  final String commandHash;
 
   UserState({
     @required this.uid,
@@ -14,6 +16,8 @@ class UserState {
     @required this.name,
     @required this.isReady,
     @required this.selectedAnswer,
+    @required this.command,
+    @required this.commandHash
   });
 
   UserState.fromJson(Map<String, dynamic> json)
@@ -21,7 +25,9 @@ class UserState {
         avatarUrl = json['avatarUrl'],
         isReady = json['isReady'],
         uid = json['uid'],
-        selectedAnswer = json['selectedAnswer'];
+        selectedAnswer = json['selectedAnswer'],
+        command = json['command'],
+        commandHash = json['commandHash'];
 
   Map<String, dynamic> toJson() =>
       {
@@ -29,7 +35,9 @@ class UserState {
         'avatarUrl': avatarUrl,
         'isReady': isReady,
         'uid': uid,
-        'selectedAnswer': selectedAnswer
+        'selectedAnswer': selectedAnswer,
+        'command': command,
+        'commandHash': commandHash,
       };
 
   static UserState initial() {
@@ -38,13 +46,16 @@ class UserState {
         name: "Best name",
         isReady: false,
         uid: "",
-        selectedAnswer: null
+        selectedAnswer: null,
+        command: null,
+        commandHash: ""
     );
   }
 
   @override
   String toString() {
-    return 'UserState: {avatarUrl: $avatarUrl} {name: $name} {isReady: $isReady} {uid: $uid} {selectedAnswer: $selectedAnswer}';
+    return 'UserState: {avatarUrl: $avatarUrl} {name: $name} {isReady: $isReady}' +
+        ' {uid: $uid} {selectedAnswer: $selectedAnswer} {commandHash: $commandHash}';
   }
 
   @override

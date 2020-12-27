@@ -12,10 +12,50 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:uuid/uuid.dart';
+
+import 'commandExecutor.dart';
 
 DatabaseReference _roomRef = FirebaseDatabase.instance.reference().child('rooms');
 StreamSubscription<Event> _roomSubscription;
 final AuthService _auth = AuthService();
+final uuid = Uuid();
+
+Future sendRedirectToRoundPage(BuildContext ctx) async {
+  print('PPPPPPPPPPP');
+  // dynamic cmd = {
+  //   'command': REDIRECT,
+  //   'value': '/round',
+  //   'meta': null,
+  // };
+  dynamic cmd = {
+    'command': SHOW_SCORE_TABLE,
+    'value': null,
+    'meta': null,
+  };
+  await sendCommand(cmd, ctx);
+}
+
+Future sendCommand(dynamic command, BuildContext ctx) async {
+  Store<AppState> s = getStore();
+  String roomId = s.state.roomState.roomName;
+  if (roomId == null) {
+    return;
+  }
+  var commandHash = uuid.v4();
+  updateRoom(roomId, (val) {
+    List<dynamic> players = List<dynamic>.of(val['players']);
+    players.forEach((player) {
+      player['command'] = command;
+      player['commandHash'] = commandHash;
+    });
+    Map<String, dynamic> data = {
+      ...val,
+      "players": players,
+    };
+    return data;
+  });
+}
 
 Future changeQuestion(BuildContext ctx) async {
   Store<AppState> s = getStore();
@@ -28,13 +68,15 @@ Future changeQuestion(BuildContext ctx) async {
     List<dynamic> players = List<dynamic>.of(val['players']);
     print("AAAAAAQGGG");
     print(players);
+    var randomPlayer = rng.nextInt(players.length);
     players.forEach((player) {
       player['selectedAnswer'] = null;
     });
     Map<String, dynamic> data = {
       ...val,
       "players": players,
-      "currentQuestionId": rng.nextInt(getQuestions().length)
+      "currentQuestionId": rng.nextInt(getQuestions().length),
+      "askedPlayer": players[randomPlayer]['uid']
     };
     return data;
   });
@@ -95,17 +137,11 @@ Future updateYourselfInTheRoom() async {
   if (roomId == null) {
     return;
   }
-  String avatarUrl = s.state.userState.avatarUrl;
   await updateRoom(roomId, (val) {
-    print("Asasasaw");
-    print({
-      ...s.state.userState.toJson()
-    });
     print(s.state.userState.toJson());
     if (val != null) {
       bool playersAlreadyExistInRoom = [...val["players"]].any((element) => element["uid"] == currentUser.uid);
       dynamic playersWithoutCurrentPlayer = [...val["players"]].where((element) => element["uid"] != currentUser.uid);
-      dynamic currentPlayer = [...val["players"]].where((element) => element["uid"] == currentUser.uid).first;
       if (playersAlreadyExistInRoom) {
         Map<String, dynamic> data = {
           ...val,
@@ -123,7 +159,6 @@ Future updateYourselfInTheRoom() async {
 Future initRoom(String roomId) async {
   UserModule currentUser = _auth.getCurrentUser();
   Store<AppState> store = getStore();
-  String avatarUrl = store.state.userState.avatarUrl;
   await updateRoom(roomId, (val) {
     return {
       "hostId": currentUser.uid,
@@ -145,10 +180,11 @@ void createRoomSubscription(String roomName, BuildContext context) {
       Map<String, dynamic> room = Map<String, dynamic>.from(value);
       StoreProvider.of<AppState>(context)
           .dispatch(UpdateRoom(
-          players: usersFromJson(room),
+          players: usersFromJson(room, context),
           roomName: roomName,
           hostId: room['hostId'],
-          currentQuestionId: room['currentQuestionId'].toString()
+          currentQuestionId: room['currentQuestionId'].toString(),
+          askedPlayer: room['askedPlayer']
       ));
       print('KKKKKK $value');
     }

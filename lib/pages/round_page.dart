@@ -24,11 +24,13 @@ class RoundPage extends StatefulWidget {
 }
 
 class _RoundPageState extends State<RoundPage> {
+  AuthService _authService = new AuthService();
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, state) {
+          Color frameColor = isAskedPlayer(state.roomState) ? Colors.yellow : Colors.white;
           return Scaffold(
             appBar: AmikojAppBar(context),
             backgroundColor: backgroundColor,
@@ -45,9 +47,6 @@ class _RoundPageState extends State<RoundPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          Spacer(
-                            flex: 2,
-                          ),
                           Expanded(
                             flex: 6,
                             child: Column(
@@ -62,7 +61,7 @@ class _RoundPageState extends State<RoundPage> {
                                               borderRadius:
                                               BorderRadius.circular(36.0),
                                               border: Border.all(
-                                                  color: Colors.white, width: 4),
+                                                  color: frameColor, width: 4),
                                               color: Color(0x55000000)),
                                           child: Column(
                                             children: <Widget>[
@@ -86,7 +85,7 @@ class _RoundPageState extends State<RoundPage> {
                                                 ],
                                               ),
                                               Divider(
-                                                color: Colors.white,
+                                                color: frameColor,
                                                 thickness: 4,
                                                 height: 0,
                                               ),
@@ -109,7 +108,7 @@ class _RoundPageState extends State<RoundPage> {
                                                 ],
                                               ),
                                               Divider(
-                                                color: Colors.white,
+                                                color: frameColor,
                                                 thickness: 4,
                                                 height: 0,
                                               ),
@@ -136,6 +135,10 @@ class _RoundPageState extends State<RoundPage> {
           );
         }
     );
+  }
+
+  bool isAskedPlayer(RoomState roomState) {
+    return _authService.getCurrentUser().uid == roomState.askedPlayer;
   }
 
   Widget answerCard(String key, String answer, BuildContext ctx, bool isSelected) {

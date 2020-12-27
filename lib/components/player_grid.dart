@@ -57,7 +57,7 @@ class PlayerGrid extends StatelessWidget {
               ),
             ),
             Text(player.name, style: whiteText),
-            isHost ?
+            !isHost ?
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: FaIcon(
