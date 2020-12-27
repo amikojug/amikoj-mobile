@@ -7,19 +7,22 @@ class RoomState {
   final String roomName;
   final String hostId;
   final String currentQuestionId;
+  final String askedPlayer;
 
   RoomState({
     @required this.players,
     @required this.roomName,
     @required this.hostId,
-    @required this.currentQuestionId
+    @required this.currentQuestionId,
+    @required this.askedPlayer
   });
 
   RoomState.fromJson(Map<String, dynamic> json)
     : players = json['players'],
       roomName = json['roomName'],
       hostId = json['hostId'],
-      currentQuestionId = json['currentQuestionId'];
+      currentQuestionId = json['currentQuestionId'],
+      askedPlayer= json['askedPlayer'];
 
   Map<String, dynamic> toJson() =>
       {
@@ -27,6 +30,7 @@ class RoomState {
         'roomName': roomName,
         'hostId': hostId,
         'currentQuestionId': currentQuestionId,
+        'askedPlayer': askedPlayer
       };
 
   static RoomState initial() {
@@ -34,13 +38,17 @@ class RoomState {
         players: new List(),
         roomName: "",
         hostId: "",
-        currentQuestionId: '0'
+        currentQuestionId: '0',
+        askedPlayer: ""
     );
   }
 
   @override
   String toString() {
-    return 'RoomState: {avatarUrl: $players} {roomName: $roomName} {hostId: $hostId} {currentQuestionId: $currentQuestionId}';
+    return 'RoomState: {avatarUrl: $players} {roomName: $roomName} ' +
+        '{hostId: $hostId} {currentQuestionId: $currentQuestionId}' +
+        '{askedPlayer: $askedPlayer}'
+    ;
   }
 
   @override

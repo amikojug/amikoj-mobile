@@ -13,7 +13,8 @@ RoomState _updateRoom(RoomState state, UpdateRoom action) {
     'players': action.players,
     'roomName': action.roomName,
     'hostId': action.hostId,
-    'currentQuestionId': action.currentQuestionId
+    'currentQuestionId': action.currentQuestionId,
+    'askedPlayer': action.askedPlayer
   });
 }
 
@@ -27,7 +28,8 @@ class UpdateRoom {
   final String roomName;
   final String hostId;
   final String currentQuestionId;
-  UpdateRoom({ this.players, this.roomName, this.hostId, this.currentQuestionId });
+  final String askedPlayer;
+  UpdateRoom({ this.players, this.roomName, this.hostId, this.currentQuestionId, this.askedPlayer });
 }
 
 class ResetRoom {

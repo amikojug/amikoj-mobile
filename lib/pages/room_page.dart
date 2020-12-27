@@ -115,26 +115,6 @@ class RoomPage extends StatelessWidget {
                                                 thickness: 4,
                                                 height: 0,
                                               ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        vertical: 10),
-                                                    child: Text(
-                                                      "PIN: 123456",
-                                                      style: whiteText,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Divider(
-                                                color: Colors.white,
-                                                thickness: 4,
-                                                height: 0,
-                                              ),
                                               PlayerGrid(),
                                             ],
                                           )),
@@ -174,7 +154,9 @@ class RoomPage extends StatelessWidget {
         highlightColor: Color(0x22FFFFFF),
         child: PillButton(
           "Start",
-          redirect: "/round",
+          action: () async {
+            await sendRedirectToRoundPage(ctx);
+          },
         ),
       );
     }
