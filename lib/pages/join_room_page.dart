@@ -26,20 +26,23 @@ class _JoinRoomPageState extends State<JoinRoomPage> {
     super.initState();
 
     roomIdTextController.addListener(() {
+      valid();
       setState(() {
         roomId = roomIdTextController.text;
       });
     });
   }
 
-  void valid() {
+  void valid() async {
     print('funkcja walidacji');
     if (roomId.isNotEmpty) {
       setState(() {
         isValid = true;
+        error = '';
       });
     } else {
       setState(() {
+        isValid = false;
         error = 'Room name cannot be empty';
       });
     }
