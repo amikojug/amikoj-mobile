@@ -45,10 +45,11 @@ class AccessPage extends StatelessWidget {
                                 print('error signing in');
                               } else {
                                 print('signed in');
-                                String avatarUrl = await downloadUserAvatar(result.uid);
+                                String avatarUrl =
+                                    await downloadUserAvatar(result.uid);
                                 if (avatarUrl != null) {
-                                  StoreProvider.of<AppState>(context)
-                                      .dispatch(UpdateUser(avatarUrl: avatarUrl));
+                                  StoreProvider.of<AppState>(context).dispatch(
+                                      UpdateUser(avatarUrl: avatarUrl));
                                 }
                                 StoreProvider.of<AppState>(context)
                                     .dispatch(UpdateUserUid(uid: result.uid));
@@ -59,6 +60,7 @@ class AccessPage extends StatelessWidget {
                           Spacer(),
                           PillButton(
                             "Login",
+                            valid: true,
                             redirect: "/login",
                           ),
                           Spacer(

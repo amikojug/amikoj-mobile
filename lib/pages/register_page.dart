@@ -1,4 +1,5 @@
 import 'package:amikoj/components/loading.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -22,7 +23,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final passwordTextController = TextEditingController();
   final confirmPasswordTextController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _autovalidate = false;
   final AuthService _auth = AuthService();
 
   String loginText = "";
@@ -93,10 +93,6 @@ class _RegisterPageState extends State<RegisterPage> {
       } else {
         Navigator.pushNamed(context, '/login');
       }
-    } else {
-      setState(() {
-        _autovalidate = true;
-      });
     }
   }
 

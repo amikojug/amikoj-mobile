@@ -18,6 +18,8 @@ class _JoinRoomPageState extends State<JoinRoomPage> {
   final roomIdTextController = TextEditingController();
 
   String roomId = "";
+  String error = '';
+  bool isValid = false;
 
   @override
   void initState() {
@@ -30,8 +32,23 @@ class _JoinRoomPageState extends State<JoinRoomPage> {
     });
   }
 
+  void valid() {
+    print('funkcja walidacji');
+    if (roomId.isNotEmpty) {
+      setState(() {
+        isValid = true;
+      });
+    } else {
+      setState(() {
+        error = 'Room name cannot be empty';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    double _width = MediaQuery.of(context).size.width;
+    double _height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AmikojAppBar(context),
       backgroundColor: backgroundColor,
@@ -55,9 +72,20 @@ class _JoinRoomPageState extends State<JoinRoomPage> {
                           Spacer(
                             flex: 3,
                           ),
-                          PillInput("Room ID", roomIdTextController),
+                          Text(
+                            error,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: _width * 0.05,
+                            ),
+                          ),
+                          SizedBox(height: _height * 0.03),
+                          PillInput("Room Name", roomIdTextController),
                           Spacer(),
-                          PillButton("Join room",
+                          PillButton(
+                            "Join room",
+                            valid: isValid,
+                            action: valid,
                             redirect: "/room",
                             redirectArgument: {
                               "type": RoomAction.join,
@@ -65,10 +93,14 @@ class _JoinRoomPageState extends State<JoinRoomPage> {
                             },
                           ),
                           Spacer(),
-                          PillButton("Back",
+                          PillButton(
+                            "Back",
+                            valid: true,
                             redirect: "/home",
                           ),
-                          Spacer(flex: 3,),
+                          Spacer(
+                            flex: 3,
+                          ),
                         ],
                       ),
                     ),

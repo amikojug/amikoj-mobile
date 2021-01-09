@@ -18,7 +18,7 @@ class PillInput extends StatelessWidget {
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width;
     // double _height = MediaQuery.of(context).size.height;
-    print(validator);
+    // print(validator);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: TextFormField(
