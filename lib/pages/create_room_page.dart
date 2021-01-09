@@ -1,5 +1,7 @@
 import 'package:amikoj/components/app_bar.dart';
 import 'package:amikoj/constants/room_action_type.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -25,6 +27,7 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
     super.initState();
 
     roomNameTextController.addListener(() {
+      valid();
       setState(() {
         roomName = roomNameTextController.text;
       });
@@ -36,9 +39,11 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
     if (roomName.isNotEmpty) {
       setState(() {
         isValid = true;
+        error = '';
       });
     } else {
       setState(() {
+        isValid = false;
         error = 'Room name cannot be empty';
       });
     }
@@ -48,6 +53,7 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width;
     double _height = MediaQuery.of(context).size.height;
+    // getData();
     return Scaffold(
       appBar: AmikojAppBar(context),
       backgroundColor: backgroundColor,
@@ -128,18 +134,18 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
   //     print(snapshot.value);
   //   });
 
-  // Stream<QuerySnapshot> productRef =
-  //     FirebaseFirestore.instance.collection("rooms").snapshots();
-  // print('--------------------------');
-  // print(productRef);
-  // productRef.forEach((field) {
-  //   print('-----');
-  //   print(field.docs.asMap());
-  //   field.docs.asMap().forEach((index, data) {
-  //     // print(field.docs[index]);
-  //     // roomsNames.add(field.docs[index][]);
+  //   Stream<QuerySnapshot> productRef =
+  //       FirebaseFirestore.instance.collection("rooms").snapshots();
+  //   print('--------------------------');
+  //   print(productRef);
+  //   productRef.forEach((field) {
+  //     print('-----');
+  //     print(field.docs.asMap().keys);
+  //     field.docs.asMap().forEach((index, data) {
+  //       // print(field.docs[index]);
+  //       // roomsNames.add(field.docs[index][]);
+  //     });
   //   });
-  // });
-  // print(roomsNames);
+  //   print(roomsNames);
   // }
 }
