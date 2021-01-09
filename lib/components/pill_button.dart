@@ -6,8 +6,10 @@ class PillButton extends StatelessWidget {
   final String redirect;
   final Function action;
   final dynamic redirectArgument;
+  final bool valid;
 
-  PillButton(this.text, {this.redirect, this.action, this.redirectArgument});
+  PillButton(this.text,
+      {this.redirect, this.action, this.redirectArgument, this.valid});
 
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width;
@@ -25,10 +27,12 @@ class PillButton extends StatelessWidget {
           padding: EdgeInsets.all(_width * 0.1 / 2.5),
           minWidth: double.infinity,
           onPressed: () async {
-            if (this.redirect != null)
-              Navigator.pushNamed(context, this.redirect,
-                  arguments: this.redirectArgument);
             if (this.action != null) action();
+            if (this.valid != null && this.valid) {
+              if (this.redirect != null)
+                Navigator.pushNamed(context, this.redirect,
+                    arguments: this.redirectArgument);
+            }
           },
           child: Text(
             this.text,

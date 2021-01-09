@@ -30,7 +30,8 @@ class _RoundPageState extends State<RoundPage> {
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, state) {
-          Color frameColor = isAskedPlayer(state.roomState) ? Colors.yellow : Colors.white;
+          Color frameColor =
+              isAskedPlayer(state.roomState) ? Colors.yellow : Colors.white;
           return Scaffold(
             appBar: AmikojAppBar(context),
             backgroundColor: backgroundColor,
@@ -54,12 +55,13 @@ class _RoundPageState extends State<RoundPage> {
                                 Expanded(
                                     flex: 10,
                                     child: Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 20),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 20),
                                       child: Container(
                                           width: double.infinity,
                                           decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(36.0),
+                                                  BorderRadius.circular(36.0),
                                               border: Border.all(
                                                   color: frameColor, width: 4),
                                               color: Color(0x55000000)),
@@ -67,18 +69,19 @@ class _RoundPageState extends State<RoundPage> {
                                             children: <Widget>[
                                               Row(
                                                 mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                                    MainAxisAlignment.center,
                                                 children: <Widget>[
                                                   Padding(
-                                                    padding:
-                                                    const EdgeInsets.symmetric(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
                                                         vertical: 10),
                                                     child: Text(
                                                       state.roomState.roomName,
                                                       style: TextStyle(
                                                         fontSize: 20.0,
                                                         color: Colors.white,
-                                                        fontWeight: FontWeight.w500,
+                                                        fontWeight:
+                                                            FontWeight.w500,
                                                       ),
                                                     ),
                                                   ),
@@ -91,17 +94,22 @@ class _RoundPageState extends State<RoundPage> {
                                               ),
                                               Row(
                                                 mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                                    MainAxisAlignment.center,
                                                 children: <Widget>[
                                                   Flexible(
                                                     child: Padding(
-                                                      padding:
-                                                      const EdgeInsets.symmetric(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
                                                           vertical: 10),
                                                       child: Text(
-                                                        getQuestions()[getQuestionNumber(state.roomState)]['question'],
+                                                        getQuestions()[
+                                                                getQuestionNumber(
+                                                                    state
+                                                                        .roomState)]
+                                                            ['question'],
                                                         style: whiteText,
-                                                        textAlign: TextAlign.center,
+                                                        textAlign:
+                                                            TextAlign.center,
                                                       ),
                                                     ),
                                                   ),
@@ -113,16 +121,23 @@ class _RoundPageState extends State<RoundPage> {
                                                 height: 0,
                                               ),
                                               Expanded(
-                                                child: ListView(children: getAnswerCards(context, state.userState, state.roomState)),
+                                                child: ListView(
+                                                    children: getAnswerCards(
+                                                        context,
+                                                        state.userState,
+                                                        state.roomState)),
                                               )
                                             ],
                                           )),
                                     )),
                                 Spacer(),
-                                PillButton("Next Question", action: () {
-                                  print("KKK1");
-                                  changeQuestion(context);
-                                },),
+                                PillButton(
+                                  "Next Question",
+                                  action: () {
+                                    print("KKK1");
+                                    changeQuestion(context);
+                                  },
+                                ),
                                 Spacer(),
                               ],
                             ),
@@ -133,15 +148,15 @@ class _RoundPageState extends State<RoundPage> {
               ],
             ),
           );
-        }
-    );
+        });
   }
 
   bool isAskedPlayer(RoomState roomState) {
     return _authService.getCurrentUser().uid == roomState.askedPlayer;
   }
 
-  Widget answerCard(String key, String answer, BuildContext ctx, bool isSelected) {
+  Widget answerCard(
+      String key, String answer, BuildContext ctx, bool isSelected) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       child: Container(
@@ -157,7 +172,7 @@ class _RoundPageState extends State<RoundPage> {
             updateYourselfInTheRoom();
           },
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(360.0),
+            borderRadius: BorderRadius.circular(360.0),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -168,11 +183,10 @@ class _RoundPageState extends State<RoundPage> {
                   child: Container(
                     alignment: Alignment.center,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                      child: Text(
-                          answer,
-                          textAlign: TextAlign.center,
-                          style: whiteText),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 12),
+                      child: Text(answer,
+                          textAlign: TextAlign.center, style: whiteText),
                     ),
                   ),
                 ),
@@ -192,10 +206,12 @@ class _RoundPageState extends State<RoundPage> {
     }
   }
 
-  List<Widget> getAnswerCards(BuildContext ctx, UserState userState, RoomState roomState) {
+  List<Widget> getAnswerCards(
+      BuildContext ctx, UserState userState, RoomState roomState) {
     List<Widget> widgets = [];
-    getQuestions()[getQuestionNumber(roomState)]['answers']
-        .forEach((key, value) => widgets.add(answerCard(key, value, ctx, userState.selectedAnswer == key)));
+    getQuestions()[getQuestionNumber(roomState)]['answers'].forEach(
+        (key, value) => widgets
+            .add(answerCard(key, value, ctx, userState.selectedAnswer == key)));
     return widgets;
   }
 }

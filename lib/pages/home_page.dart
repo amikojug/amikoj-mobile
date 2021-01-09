@@ -35,11 +35,13 @@ class HomePage extends StatelessWidget {
                           ),
                           PillButton(
                             "Create room",
+                            valid: true,
                             redirect: "/createRoom",
                           ),
                           Spacer(),
                           PillButton(
                             "Join room",
+                            valid: true,
                             redirect: "/joinRoom",
                           ),
                           Spacer(

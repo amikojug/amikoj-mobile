@@ -125,6 +125,7 @@ class RoomPage extends StatelessWidget {
                                 Spacer(),
                                 PillButton(
                                   "Leave",
+                                  valid: true,
                                   redirect: "/home",
                                   action: () async {
                                     removeYourselfFromRoom();
