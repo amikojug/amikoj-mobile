@@ -34,17 +34,28 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
     });
   }
 
-  void valid() {
-    print('funkcja walidacji');
-    if (roomName.isNotEmpty) {
+  void valid() async {
+    List<String> roomsNames = [];
+    await getData().then((value) => {
+          value.forEach((val) {
+            print(val);
+            roomsNames.add(val);
+          })
+        });
+    if (roomsNames.contains(roomName)) {
       setState(() {
-        isValid = true;
-        error = '';
+        isValid = false;
+        error = 'This room already exist';
       });
-    } else {
+    } else if (roomName.isEmpty) {
       setState(() {
         isValid = false;
         error = 'Room name cannot be empty';
+      });
+    } else {
+      setState(() {
+        isValid = true;
+        error = '';
       });
     }
   }
@@ -53,7 +64,6 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width;
     double _height = MediaQuery.of(context).size.height;
-    // getData();
     return Scaffold(
       appBar: AmikojAppBar(context),
       backgroundColor: backgroundColor,
@@ -125,27 +135,18 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
     );
   }
 
-  // List<String> getData() {
-  //   List<String> roomsNames = [];
-  //   final databaseReference =
-  //       FirebaseDatabase.instance.reference().child('rooms');
+  Future getData() async {
+    List<String> roomsNames = [];
 
-  //   databaseReference.once().then((DataSnapshot snapshot) {
-  //     print(snapshot.value);
-  //   });
+    final databaseReference =
+        FirebaseDatabase.instance.reference().child('rooms');
 
-  //   Stream<QuerySnapshot> productRef =
-  //       FirebaseFirestore.instance.collection("rooms").snapshots();
-  //   print('--------------------------');
-  //   print(productRef);
-  //   productRef.forEach((field) {
-  //     print('-----');
-  //     print(field.docs.asMap().keys);
-  //     field.docs.asMap().forEach((index, data) {
-  //       // print(field.docs[index]);
-  //       // roomsNames.add(field.docs[index][]);
-  //     });
-  //   });
-  //   print(roomsNames);
-  // }
+    await databaseReference.once().then((DataSnapshot snapshot) {
+      snapshot.value.keys.forEach((item) {
+        roomsNames.add(item);
+      });
+    });
+
+    return roomsNames;
+  }
 }

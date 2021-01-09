@@ -1,6 +1,7 @@
 import 'package:amikoj/components/app_bar.dart';
 import 'package:amikoj/components/pill_input.dart';
 import 'package:amikoj/constants/room_action_type.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -34,16 +35,27 @@ class _JoinRoomPageState extends State<JoinRoomPage> {
   }
 
   void valid() async {
-    print('funkcja walidacji');
-    if (roomId.isNotEmpty) {
-      setState(() {
-        isValid = true;
-        error = '';
-      });
-    } else {
+    List<String> roomsNames = [];
+    await getData().then((value) => {
+          value.forEach((val) {
+            print(val);
+            roomsNames.add(val);
+          })
+        });
+    if (roomId.isEmpty) {
       setState(() {
         isValid = false;
         error = 'Room name cannot be empty';
+      });
+    } else if (!roomsNames.contains(roomId)) {
+      setState(() {
+        isValid = false;
+        error = "This room don't exist";
+      });
+    } else {
+      setState(() {
+        isValid = true;
+        error = '';
       });
     }
   }
@@ -113,5 +125,20 @@ class _JoinRoomPageState extends State<JoinRoomPage> {
         ],
       ),
     );
+  }
+
+  Future getData() async {
+    List<String> roomsNames = [];
+
+    final databaseReference =
+        FirebaseDatabase.instance.reference().child('rooms');
+
+    await databaseReference.once().then((DataSnapshot snapshot) {
+      snapshot.value.keys.forEach((item) {
+        roomsNames.add(item);
+      });
+    });
+
+    return roomsNames;
   }
 }
