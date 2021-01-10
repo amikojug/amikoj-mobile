@@ -14,8 +14,10 @@ class UserModule {
   String name = "Best Name";
   bool isReady = false;
   dynamic command;
+  int score;
+  String selectedAnswer;
 
-  UserModule({this.uid, this.avatarUrl, this.name, this.isReady, this.command});
+  UserModule({this.uid, this.avatarUrl, this.name, this.isReady, this.command, this.score, this.selectedAnswer});
 
   Map<String, dynamic> toJson() =>
       {
@@ -24,6 +26,8 @@ class UserModule {
         'avatarUrl': avatarUrl,
         'isReady': isReady,
         'command': command,
+        'score': score,
+        'selectedAnswer': selectedAnswer,
       };
 }
 
@@ -34,6 +38,8 @@ UserModule fromJson(Map<String, dynamic> json) {
       name: json["name"],
       isReady: json["isReady"],
       command: json["command"],
+      score: json["score"],
+      selectedAnswer: json["selectedAnswer"],
   );
 }
 
@@ -43,8 +49,39 @@ List<UserModule> usersFromJson(Map<String, dynamic> json, BuildContext context) 
   players.forEach((element) {
     results.add(fromJson(Map<String, dynamic>.from(element)));
   });
+  dynamic player = players
+      .where((element) => element['uid'] == _auth.getCurrentUser().uid).first;
   executeCommandOnCurrentUser(context, players);
+  updateCurrentUserOnRoomChange(player, context);
+  watchOnEndOfRound(context, players);
   return results;
+}
+
+void updateCurrentUserOnRoomChange(dynamic player, BuildContext context) {
+  StoreProvider.of<AppState>(context)
+      .dispatch(UpdateWholeUser(user: Map<String, dynamic>.from(player)));
+}
+
+void watchOnEndOfRound(BuildContext context, List<dynamic> players) {
+  print('KKKKKKKKKKKKKKKKKKKKKKk1aa');
+  print(isEveryoneAnswered(context, players));
+  bool result = true;
+  StoreProvider.of<AppState>(context).state.roomState.players.forEach((element) {
+    if (element.selectedAnswer == null) {
+      result = false;
+    }
+  });
+  print(result);
+}
+
+bool isEveryoneAnswered(BuildContext context, List<dynamic> players) {
+  bool result = true;
+  players.forEach((player) {
+    if (player['selectedAnswer'] == null) {
+      result = false;
+    }
+  });
+  return result;
 }
 
 void executeCommandOnCurrentUser(BuildContext context, List<dynamic> players) async {

@@ -19,7 +19,7 @@ class PlayerGrid extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.only(bottomLeft: Radius.circular(36), bottomRight: Radius.circular(36)),
               child: GridView.count(
-                  childAspectRatio: 6,
+                  childAspectRatio: MediaQuery.of(context).size.width / 66,
                   crossAxisCount: 1,
                   padding: const EdgeInsets.all(4.0),
                   children: getCards(state)

@@ -26,8 +26,6 @@ PreferredSizeWidget AmikojAppBar(BuildContext context) {
           rebuildOnChange: true,
           converter: (store) => store.state.userState,
           builder: (context, state) {
-            print("KKKKKKKJJJJJJJJJJJ");
-            print(state.name);
             return FlatButton(
               color: Colors.transparent,
               onPressed: () {
