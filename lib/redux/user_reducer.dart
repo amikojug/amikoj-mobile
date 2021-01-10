@@ -12,6 +12,8 @@ final userReducer = combineReducers<UserState>([
   TypedReducer<UserState, UpdateUserSelectedAnswer>(_updateUserSelectedAnswer),
   TypedReducer<UserState, UpdateUserCommand>(_updateUserCommand),
   TypedReducer<UserState, UpdateUserCommandHash>(_updateUserCommandHash),
+  TypedReducer<UserState, UpdateUserScore>(_updateUserScore),
+  TypedReducer<UserState, UpdateWholeUser>(_updateWholeUser),
 
 ]);
 
@@ -62,15 +64,21 @@ UserState _updateUserCommand(UserState state, UpdateUserCommand action) {
 }
 
 UserState _updateUserCommandHash(UserState state, UpdateUserCommandHash action) {
-  print("_updateUserCommandHash");
-  print({
-    ...state.toJson(),
-    "commandHash": action.commandHash,
-  });
   return UserState.fromJson({
     ...state.toJson(),
     "commandHash": action.commandHash,
   });
+}
+
+UserState _updateUserScore(UserState state, UpdateUserScore action) {
+  return UserState.fromJson({
+    ...state.toJson(),
+    'score': state.score + 1
+  });
+}
+
+UserState _updateWholeUser(UserState state, UpdateWholeUser action) {
+  return UserState.fromJson(action.user);
 }
 
 // Actions
@@ -109,6 +117,15 @@ class UpdateUserCommandHash {
   final String commandHash;
   final BuildContext ctx;
   UpdateUserCommandHash({this.commandHash, this.ctx});
+}
+
+class UpdateUserScore {
+  UpdateUserScore();
+}
+
+class UpdateWholeUser {
+  final Map<String, dynamic> user;
+  UpdateWholeUser({this.user});
 }
 
 class ResetUser {

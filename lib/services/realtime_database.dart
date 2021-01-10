@@ -22,14 +22,26 @@ final AuthService _auth = AuthService();
 final uuid = Uuid();
 
 Future sendRedirectToRoundPage(BuildContext ctx) async {
-  print('PPPPPPPPPPP');
-  // dynamic cmd = {
-  //   'command': REDIRECT,
-  //   'value': '/round',
-  //   'meta': null,
-  // };
+  dynamic cmd = {
+    'command': REDIRECT,
+    'value': '/round',
+    'meta': null,
+  };
+  await sendCommand(cmd, ctx);
+}
+
+Future sendShowScoreTable(BuildContext ctx) async {
   dynamic cmd = {
     'command': SHOW_SCORE_TABLE,
+    'value': null,
+    'meta': null,
+  };
+  await sendCommand(cmd, ctx);
+}
+
+Future sendResetTimer(BuildContext ctx) async {
+  dynamic cmd = {
+    'command': RESET_TIMER,
     'value': null,
     'meta': null,
   };
@@ -70,13 +82,17 @@ Future changeQuestion(BuildContext ctx) async {
     print(players);
     var randomPlayer = rng.nextInt(players.length);
     players.forEach((player) {
+      print('MMMMMMMMMMMMMMNNN');
+      print(player['name']);
+      print(player['selectedAnswer']);
       player['selectedAnswer'] = null;
     });
     Map<String, dynamic> data = {
       ...val,
       "players": players,
       "currentQuestionId": rng.nextInt(getQuestions().length),
-      "askedPlayer": players[randomPlayer]['uid']
+      "askedPlayer": players[randomPlayer]['uid'],
+      "totalQuestions": val['totalQuestions'] + 1
     };
     return data;
   });
@@ -164,7 +180,8 @@ Future initRoom(String roomId) async {
       "hostId": currentUser.uid,
       "players": [{
         ...store.state.userState.toJson(),
-      }]
+      }],
+      "totalQuestions": 0
     };
   });
 }

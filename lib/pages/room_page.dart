@@ -58,7 +58,7 @@ class RoomPage extends StatelessWidget {
               alignment: Alignment.bottomCenter,
               children: <Widget>[
                 SvgPicture.asset(
-                  'assets/images/background.svg',
+                  'assets/images/background_without_logo.svg',
                   fit: BoxFit.cover,
                 ),
                 Center(
@@ -87,7 +87,8 @@ class RoomPage extends StatelessWidget {
                                               border: Border.all(
                                                   color: Colors.white,
                                                   width: 4),
-                                              color: Color(0x55000000)),
+                                              color: Color(0xAA000000)
+                                          ),
                                           child: Column(
                                             children: <Widget>[
                                               Row(

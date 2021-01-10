@@ -1,32 +1,43 @@
-import 'dart:convert';
+
+import 'dart:async';
 
 import 'package:amikoj/components/app_bar.dart';
+import 'package:amikoj/components/pill_button.dart';
+import 'package:amikoj/components/timer.dart';
+import 'package:amikoj/models/user_module.dart';
 import 'package:amikoj/redux/room_state.dart';
 import 'package:amikoj/redux/user_state.dart';
 import 'package:amikoj/services/realtime_database.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:amikoj/models/user_module.dart';
 import 'package:amikoj/redux/app_state.dart';
 import 'package:amikoj/redux/user_reducer.dart';
-import 'package:amikoj/services/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:amikoj/services/auth.dart';
-import 'package:amikoj/components/pill_button.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../constants/constants.dart';
+import 'package:amikoj/services/commandExecutor.dart';
 
 class RoundPage extends StatefulWidget {
   @override
   _RoundPageState createState() => _RoundPageState();
 }
 
+TimerController timerController = new TimerController();
+
+final AuthService _auth = AuthService();
+
+TimerController getTimerController() {
+  return timerController;
+}
+
 class _RoundPageState extends State<RoundPage> {
   AuthService _authService = new AuthService();
+
   @override
   Widget build(BuildContext context) {
+    double _height = MediaQuery.of(context).size.height;
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, state) {
@@ -39,7 +50,7 @@ class _RoundPageState extends State<RoundPage> {
               alignment: Alignment.bottomCenter,
               children: <Widget>[
                 SvgPicture.asset(
-                  'assets/images/background.svg',
+                  'assets/images/background_without_logo.svg',
                   fit: BoxFit.cover,
                 ),
                 Center(
@@ -53,6 +64,12 @@ class _RoundPageState extends State<RoundPage> {
                             child: Column(
                               children: <Widget>[
                                 Expanded(
+                                  flex: 4,
+                                  child: CountDownTimer(size: (_height * 0.13).toInt(), onFinish: () {
+                                     updateAnswerAfterTimesUp(context);
+                                  }, timerController: timerController,),
+                                ),
+                                Expanded(
                                     flex: 10,
                                     child: Padding(
                                       padding:
@@ -64,7 +81,7 @@ class _RoundPageState extends State<RoundPage> {
                                                   BorderRadius.circular(36.0),
                                               border: Border.all(
                                                   color: frameColor, width: 4),
-                                              color: Color(0x55000000)),
+                                              color: Color(0x77000000)),
                                           child: Column(
                                             children: <Widget>[
                                               Row(
@@ -131,24 +148,33 @@ class _RoundPageState extends State<RoundPage> {
                                           )),
                                     )),
                                 Spacer(),
-                                PillButton(
-                                  "Next Question",
-                                  action: () {
-                                    print("KKK1");
-                                    changeQuestion(context);
-                                  },
-                                ),
+                                PillButton("Next Question", action: () {
+                                  print("KKK1");
+                                  changeQuestion(context);
+                                  sendResetTimer(context);
+                                },),
                                 Spacer(),
                               ],
                             ),
                           ),
                         ],
                       )),
-                )
+                ),
               ],
             ),
           );
         });
+  }
+
+  void updateAnswerAfterTimesUp(BuildContext context) {
+    List<UserModule> players = StoreProvider.of<AppState>(context).state.roomState.players;
+    var userId = _auth.getCurrentUser().uid;
+    dynamic selectedAnswer = players.where((element) => element.uid == userId).first.selectedAnswer;
+    if (selectedAnswer == null) {
+      StoreProvider.of<AppState>(context)
+          .dispatch(UpdateUserSelectedAnswer(selectedAnswer: 'NONE'));
+      updateYourselfInTheRoom();
+    }
   }
 
   bool isAskedPlayer(RoomState roomState) {
@@ -161,7 +187,7 @@ class _RoundPageState extends State<RoundPage> {
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       child: Container(
         decoration: BoxDecoration(
-          color: isSelected ? Color(0xAA440044) : null,
+          color: isSelected ? Color(0xAA000000) : null,
           borderRadius: BorderRadius.circular(360),
           border: Border.all(color: Colors.white, width: 1),
         ),
