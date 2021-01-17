@@ -12,6 +12,12 @@ const TextStyle whiteText = const TextStyle(
   fontWeight: FontWeight.w500,
 );
 
+const TextStyle smallWhiteText = const TextStyle(
+  fontSize: 13.0,
+  color: Colors.white,
+  fontWeight: FontWeight.w500,
+);
+
 List<dynamic> questions;
 
 List<dynamic> getQuestions() {

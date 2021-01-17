@@ -48,6 +48,38 @@ Future sendResetTimer(BuildContext ctx) async {
   await sendCommand(cmd, ctx);
 }
 
+Future increaseScore(List<UserModule> players, BuildContext ctx) async {
+  Store<AppState> s = getStore();
+  String roomId = s.state.roomState.roomName;
+  List<String> uids = List<String>.from(players.map((e) => e.uid));
+  if (roomId == null) {
+    return;
+  }
+  updateRoom(roomId, (val) {
+    List<dynamic> players = List<dynamic>.of(val['players']);
+    players.forEach((player) {
+      if (uids.contains(player['uid'])) {
+        player['score'] = player['score'] + 1;
+      }
+    });
+    Map<String, dynamic> data = {
+      ...val,
+      "players": players,
+    };
+    return data;
+  });
+}
+
+Future sendIncrease(List<UserModule> players, BuildContext ctx) async {
+  String hostId = StoreProvider.of<AppState>(ctx).state.roomState.hostId;
+  String userId = _auth.getCurrentUser().uid;
+  if (hostId == userId) {
+    await increaseScore(players, ctx);
+    await sendShowScoreTable(ctx);
+    await changeQuestion(ctx);
+  }
+}
+
 Future sendCommand(dynamic command, BuildContext ctx) async {
   Store<AppState> s = getStore();
   String roomId = s.state.roomState.roomName;
@@ -78,13 +110,8 @@ Future changeQuestion(BuildContext ctx) async {
   updateRoom(roomId, (val) {
     var rng = new Random();
     List<dynamic> players = List<dynamic>.of(val['players']);
-    print("AAAAAAQGGG");
-    print(players);
     var randomPlayer = rng.nextInt(players.length);
     players.forEach((player) {
-      print('MMMMMMMMMMMMMMNNN');
-      print(player['name']);
-      print(player['selectedAnswer']);
       player['selectedAnswer'] = null;
     });
     Map<String, dynamic> data = {
@@ -192,8 +219,6 @@ void createRoomSubscription(String roomName, BuildContext context) {
     ref: _roomRef,
     subscription: _roomSubscription,
     onUpdate: (value) {
-      print("qqqqqqqqqq1");
-      print(Map<String, dynamic>.from(value)['hostId']);
       Map<String, dynamic> room = Map<String, dynamic>.from(value);
       StoreProvider.of<AppState>(context)
           .dispatch(UpdateRoom(

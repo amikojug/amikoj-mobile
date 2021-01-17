@@ -124,7 +124,7 @@ class _RoundPageState extends State<RoundPage> {
                                                                     state
                                                                         .roomState)]
                                                             ['question'],
-                                                        style: whiteText,
+                                                        style: smallWhiteText,
                                                         textAlign:
                                                             TextAlign.center,
                                                       ),
@@ -147,12 +147,6 @@ class _RoundPageState extends State<RoundPage> {
                                             ],
                                           )),
                                     )),
-                                Spacer(),
-                                PillButton("Next Question", action: () {
-                                  print("KKK1");
-                                  changeQuestion(context);
-                                  sendResetTimer(context);
-                                },),
                                 Spacer(),
                               ],
                             ),
@@ -196,6 +190,7 @@ class _RoundPageState extends State<RoundPage> {
             StoreProvider.of<AppState>(ctx)
                 .dispatch(UpdateUserSelectedAnswer(selectedAnswer: key));
             updateYourselfInTheRoom();
+            getTimerController().stopTimer();
           },
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(360.0),
