@@ -63,7 +63,7 @@ void updateCurrentUserOnRoomChange(dynamic player, BuildContext context) {
 }
 
 void watchOnEndOfRound(BuildContext context, List<dynamic> players) {
-  print('KKKKKKKKKKKKKKKKKKKKKKk1aa');
+  bool everyoneAnswered = isEveryoneAnswered(context, players);
   print(isEveryoneAnswered(context, players));
   bool result = true;
   StoreProvider.of<AppState>(context).state.roomState.players.forEach((element) {
@@ -72,6 +72,32 @@ void watchOnEndOfRound(BuildContext context, List<dynamic> players) {
     }
   });
   print(result);
+  if (!result && everyoneAnswered) {
+    List<UserModule> playersWhoAnsweredCorrectly = getPlayersWhoAnsweredCorrectly(context, players);
+    sendIncrease(playersWhoAnsweredCorrectly, context);
+    playersWhoAnsweredCorrectly.forEach((element) {
+      print(element.name);
+    });
+  }
+}
+
+List<UserModule> getPlayersWhoAnsweredCorrectly(BuildContext context, List<dynamic> players) {
+  List<UserModule> result = new List();
+  String askedPlayerId = StoreProvider.of<AppState>(context).state.roomState.askedPlayer;
+  dynamic askedPlayer = players
+      .where((player) => player['uid'] == askedPlayerId).first;
+  String askedPlayerAnswer = askedPlayer['selectedAnswer'];
+  print('BBBBBBBBBBBSSS123');
+  print(askedPlayerAnswer);
+  if (askedPlayerAnswer != 'NONE') {
+    List<dynamic> playersWithoutAskedPlayer = List.from(players.where((p) => p['uid'] != askedPlayerId));
+    playersWithoutAskedPlayer.forEach((player) {
+      if (player['selectedAnswer'] == askedPlayerAnswer) {
+        result.add(fromJson(Map<String, dynamic>.from(player)));
+      }
+    });
+  }
+  return result;
 }
 
 bool isEveryoneAnswered(BuildContext context, List<dynamic> players) {

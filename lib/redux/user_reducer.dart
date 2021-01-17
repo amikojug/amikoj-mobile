@@ -1,4 +1,3 @@
-import 'package:amikoj/services/commandExecutor.dart';
 import 'package:flutter/widgets.dart';
 import 'package:redux/redux.dart';
 import 'package:amikoj/redux/user_state.dart';
@@ -12,9 +11,7 @@ final userReducer = combineReducers<UserState>([
   TypedReducer<UserState, UpdateUserSelectedAnswer>(_updateUserSelectedAnswer),
   TypedReducer<UserState, UpdateUserCommand>(_updateUserCommand),
   TypedReducer<UserState, UpdateUserCommandHash>(_updateUserCommandHash),
-  TypedReducer<UserState, UpdateUserScore>(_updateUserScore),
   TypedReducer<UserState, UpdateWholeUser>(_updateWholeUser),
-
 ]);
 
 UserState _updateUser(UserState state, UpdateUser action) {
@@ -70,13 +67,6 @@ UserState _updateUserCommandHash(UserState state, UpdateUserCommandHash action) 
   });
 }
 
-UserState _updateUserScore(UserState state, UpdateUserScore action) {
-  return UserState.fromJson({
-    ...state.toJson(),
-    'score': state.score + 1
-  });
-}
-
 UserState _updateWholeUser(UserState state, UpdateWholeUser action) {
   return UserState.fromJson(action.user);
 }
@@ -117,10 +107,6 @@ class UpdateUserCommandHash {
   final String commandHash;
   final BuildContext ctx;
   UpdateUserCommandHash({this.commandHash, this.ctx});
-}
-
-class UpdateUserScore {
-  UpdateUserScore();
 }
 
 class UpdateWholeUser {

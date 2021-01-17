@@ -9,7 +9,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 
 const REDIRECT = 'REDIRECT';
 const SHOW_SCORE_TABLE = 'SHOW_SCORE_TABLE';
-const INCREASE_SCORE = 'INCREASE_SCORE';
 const RESET_TIMER = 'RESET_TIMER';
 
 void execute(dynamic command, BuildContext ctx) async {
@@ -27,11 +26,6 @@ void execute(dynamic command, BuildContext ctx) async {
     case SHOW_SCORE_TABLE:
       showScoreTable(ctx);
       break;
-    case INCREASE_SCORE:
-      StoreProvider.of<AppState>(ctx)
-          .dispatch(UpdateUserScore());
-      updateYourselfInTheRoom();
-      break;
     case RESET_TIMER:
       getTimerController().resetTimer();
       break;
@@ -47,13 +41,17 @@ Future<void> showScoreTable(BuildContext ctx) async {
         title: Text('Score', style: TextStyle(
           color: Colors.white
         ),),
-        content: HorizontalBarChart.withSampleData(),
-        backgroundColor: Color(0x22000000),
+        content: HorizontalBarChart.withSampleData(context),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(36.0),
+          side: BorderSide(width: 2.0, color: Colors.lightBlue.shade50),),
+        backgroundColor: Color(0x77000000),
         actions: <Widget>[
           TextButton(
             child: Text('OK'),
             onPressed: () {
               Navigator.of(context).pop();
+              getTimerController().resetTimer();
             },
           ),
         ],

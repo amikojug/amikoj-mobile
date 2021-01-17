@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:amikoj/models/user_module.dart';
+import 'package:amikoj/redux/app_state.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:meta/meta.dart' show required;
 
 class HorizontalBarChart extends StatelessWidget {
@@ -20,9 +23,9 @@ class HorizontalBarChart extends StatelessWidget {
   HorizontalBarChart(this.seriesList, {this.animate});
 
   /// Creates a [BarChart] with sample data and no transition.
-  factory HorizontalBarChart.withSampleData() {
+  factory HorizontalBarChart.withSampleData(BuildContext context) {
     return new HorizontalBarChart(
-      _createSampleData(),
+      _createSampleData(context),
       animate: true,
     );
   }
@@ -34,26 +37,33 @@ class HorizontalBarChart extends StatelessWidget {
       animate: animate,
       vertical: true,
       // barRendererDecorator: new BarLabelDecorator(),
-      domainAxis: new charts.OrdinalAxisSpec(
-          renderSpec: new charts.SmallTickRendererSpec(
+      primaryMeasureAxis: new charts.NumericAxisSpec(
+          renderSpec: new charts.GridlineRendererSpec(
               labelStyle: new charts.TextStyleSpec(
                   fontSize: 18, // size in Pts.
                   color: charts.MaterialPalette.white),
-
-          ),
+              lineStyle: new charts.LineStyleSpec(
+                  color: charts.MaterialPalette.white))),
+      domainAxis: new charts.OrdinalAxisSpec(
+        renderSpec: new charts.SmallTickRendererSpec(
+          labelStyle: new charts.TextStyleSpec(
+            fontSize: 18, // size in Pts.
+            color: charts.MaterialPalette.white),
+          lineStyle: new charts.LineStyleSpec(
+              color: charts.MaterialPalette.white),
+        ),
       ),
     );
   }
 
 
   /// Create one series with sample hard coded data.
-  static List<charts.Series<PlayerScoreData, String>> _createSampleData() {
-    final data = [
-      new PlayerScoreData('\naaaaaaaaaaaaaaaaaaa', 5),
-      new PlayerScoreData('bbb', 25),
-      new PlayerScoreData('ccc', 100),
-      new PlayerScoreData('dd', 75),
-    ];
+  static List<charts.Series<PlayerScoreData, String>> _createSampleData(BuildContext ctx) {
+    List<UserModule> players = StoreProvider.of<AppState>(ctx).state.roomState.players;
+    List<PlayerScoreData> data = new List();
+    players.forEach((player) {
+      data.add(new PlayerScoreData(player.name, player.score));
+    });
 
     return [
       new charts.Series<PlayerScoreData, String>(

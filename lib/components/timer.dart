@@ -39,7 +39,7 @@ class _CountDownTimerState extends State<CountDownTimer>
     super.initState();
     controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 5),
+      duration: Duration(seconds: 8),
     );
     controller.addStatusListener((status) {
       if (status == AnimationStatus.dismissed) {
@@ -54,10 +54,11 @@ class _CountDownTimerState extends State<CountDownTimer>
   }
 
   void reset() {
-    controller.reverse(
-        from: controller.value == 0.0
-            ? 1.0
-            : controller.value);
+    controller.reverse(from: 1.0);
+  }
+
+  void stop() {
+    controller.stop();
   }
 
   @override
@@ -144,6 +145,10 @@ class TimerController {
 
   void resetTimer() {
     state.reset();
+  }
+
+  void stopTimer() {
+    state.stop();
   }
 }
 
