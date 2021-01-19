@@ -173,6 +173,50 @@ Future addYourselfToTheRoom(String roomId) async {
   });
 }
 
+Future removePlayerFromRoom(String uid) async {
+  Store<AppState> s = getStore();
+  String roomId = s.state.roomState.roomName;
+  if (roomId == null) {
+    return;
+  }
+  var commandHash = uuid.v4();
+  dynamic cmd = {
+    'command': REDIRECT,
+    'value': '/home',
+    'meta': null,
+  };
+  await updateRoom(roomId, (val) {
+    List<dynamic> players = List<dynamic>.of(val['players']);
+    players.forEach((player) {
+      if (uid == player['uid']) {
+        player['command'] = cmd;
+        player['commandHash'] = commandHash;
+      }
+    });
+    Map<String, dynamic> data = {
+      ...val,
+      "players": players,
+    };
+    return data;
+  });
+
+  await updateRoom(roomId, (val) {
+    print(s.state.userState.toJson());
+    if (val != null) {
+      bool playersAlreadyExistInRoom = [...val["players"]].any((element) => element["uid"] == uid);
+      dynamic playersWithoutCurrentPlayer = [...val["players"]].where((element) => element["uid"] != uid);
+      if (playersAlreadyExistInRoom) {
+        Map<String, dynamic> data = {
+          ...val,
+          "players": [...playersWithoutCurrentPlayer]
+        };
+        return data;
+      }
+    }
+    return val;
+  });
+}
+
 Future updateYourselfInTheRoom() async {
   UserModule currentUser = _auth.getCurrentUser();
   Store<AppState> s = getStore();
