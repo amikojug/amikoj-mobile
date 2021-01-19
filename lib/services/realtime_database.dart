@@ -16,7 +16,8 @@ import 'package:uuid/uuid.dart';
 
 import 'commandExecutor.dart';
 
-DatabaseReference _roomRef = FirebaseDatabase.instance.reference().child('rooms');
+DatabaseReference _roomRef =
+    FirebaseDatabase.instance.reference().child('rooms');
 StreamSubscription<Event> _roomSubscription;
 final AuthService _auth = AuthService();
 final uuid = Uuid();
@@ -124,9 +125,7 @@ Future changeQuestion(BuildContext ctx) async {
     return data;
   });
   StoreProvider.of<AppState>(ctx)
-      .dispatch(UpdateUserSelectedAnswer(
-      selectedAnswer: null
-  ));
+      .dispatch(UpdateUserSelectedAnswer(selectedAnswer: null));
 }
 
 Future removeYourselfFromRoom() async {
@@ -136,14 +135,50 @@ Future removeYourselfFromRoom() async {
   if (roomId == null) {
     return;
   }
-  await updateRoom(roomId, (val) {
+  await updateRoom(roomId, (val) async {
     if (val != null) {
-      bool playersAlreadyExistInRoom = [...val["players"]].any((element) => element["uid"] == currentUser.uid);
-      dynamic playersWithoutCurrentPlayer = [...val["players"]].where((element) => element["uid"] != currentUser.uid);
+      bool playersAlreadyExistInRoom = [...val["players"]]
+          .any((element) => element["uid"] == currentUser.uid);
+      dynamic playersWithoutCurrentPlayer = [...val["players"]]
+          .where((element) => element["uid"] != currentUser.uid);
       if (playersAlreadyExistInRoom) {
+        print(playersWithoutCurrentPlayer);
         Map<String, dynamic> data = {
           ...val,
           "players": [...playersWithoutCurrentPlayer],
+        };
+        return data;
+      }
+    }
+    return val;
+  });
+}
+
+Future removePlayerFromRoom(String playerToRemoveId) async {
+  UserModule currentUser = _auth.getCurrentUser();
+  Store<AppState> s = getStore();
+  String roomId = s.state.roomState.roomName;
+  String hostId = s.state.roomState.hostId;
+  if (roomId == null) {
+    return;
+  }
+  if (currentUser.uid != hostId) {
+    print('to nie host');
+    return;
+  }
+  print('to host');
+  print(playerToRemoveId);
+  await updateRoom(roomId, (val) async {
+    if (val != null) {
+      bool playerToRemoveExistInRoom = [...val["players"]]
+          .any((element) => element["uid"] == playerToRemoveId);
+      dynamic playersWithoutPlayerToRemove = [...val["players"]]
+          .where((element) => element["uid"] != playerToRemoveId);
+      print(playersWithoutPlayerToRemove);
+      if (playerToRemoveExistInRoom) {
+        Map<String, dynamic> data = {
+          ...val,
+          "players": [...playersWithoutPlayerToRemove],
         };
         return data;
       }
@@ -158,13 +193,15 @@ Future addYourselfToTheRoom(String roomId) async {
   await updateRoom(roomId, (val) {
     if (val != null) {
       dynamic players = val["players"] == null ? [] : val["players"];
-      bool playersAlreadyExistInRoom = players.any((element) => element["uid"] == currentUser.uid);
+      bool playersAlreadyExistInRoom =
+          players.any((element) => element["uid"] == currentUser.uid);
       if (!playersAlreadyExistInRoom) {
         Map<String, dynamic> data = {
           ...val,
-          "players": [...players, {
-            ...s.state.userState.toJson()
-          }]
+          "players": [
+            ...players,
+            {...s.state.userState.toJson()}
+          ]
         };
         return data;
       }
@@ -183,14 +220,19 @@ Future updateYourselfInTheRoom() async {
   await updateRoom(roomId, (val) {
     print(s.state.userState.toJson());
     if (val != null) {
-      bool playersAlreadyExistInRoom = [...val["players"]].any((element) => element["uid"] == currentUser.uid);
-      dynamic playersWithoutCurrentPlayer = [...val["players"]].where((element) => element["uid"] != currentUser.uid);
+      bool playersAlreadyExistInRoom = [...val["players"]]
+          .any((element) => element["uid"] == currentUser.uid);
+      dynamic playersWithoutCurrentPlayer = [...val["players"]]
+          .where((element) => element["uid"] != currentUser.uid);
       if (playersAlreadyExistInRoom) {
         Map<String, dynamic> data = {
           ...val,
-          "players": [...playersWithoutCurrentPlayer, {
-            ...s.state.userState.toJson(),
-          }]
+          "players": [
+            ...playersWithoutCurrentPlayer,
+            {
+              ...s.state.userState.toJson(),
+            }
+          ]
         };
         return data;
       }
@@ -205,9 +247,11 @@ Future initRoom(String roomId) async {
   await updateRoom(roomId, (val) {
     return {
       "hostId": currentUser.uid,
-      "players": [{
-        ...store.state.userState.toJson(),
-      }],
+      "players": [
+        {
+          ...store.state.userState.toJson(),
+        }
+      ],
       "totalQuestions": 0
     };
   });
@@ -215,22 +259,19 @@ Future initRoom(String roomId) async {
 
 void createRoomSubscription(String roomName, BuildContext context) {
   createSubscription(
-    refPath: roomName,
-    ref: _roomRef,
-    subscription: _roomSubscription,
-    onUpdate: (value) {
-      Map<String, dynamic> room = Map<String, dynamic>.from(value);
-      StoreProvider.of<AppState>(context)
-          .dispatch(UpdateRoom(
-          players: usersFromJson(room, context),
-          roomName: roomName,
-          hostId: room['hostId'],
-          currentQuestionId: room['currentQuestionId'].toString(),
-          askedPlayer: room['askedPlayer']
-      ));
-      print('KKKKKK $value');
-    }
-  );
+      refPath: roomName,
+      ref: _roomRef,
+      subscription: _roomSubscription,
+      onUpdate: (value) {
+        Map<String, dynamic> room = Map<String, dynamic>.from(value);
+        StoreProvider.of<AppState>(context).dispatch(UpdateRoom(
+            players: usersFromJson(room, context),
+            roomName: roomName,
+            hostId: room['hostId'],
+            currentQuestionId: room['currentQuestionId'].toString(),
+            askedPlayer: room['askedPlayer']));
+        print('KKKKKK $value');
+      });
 }
 
 Future updateRoom(String roomName, Function(dynamic) mutate) async {
@@ -244,10 +285,14 @@ Future updateRoom(String roomName, Function(dynamic) mutate) async {
   );
 }
 
-void createSubscription({ DatabaseReference ref, StreamSubscription<Event> subscription,
-  String refPath, Function(dynamic) onUpdate }) {
+void createSubscription(
+    {DatabaseReference ref,
+    StreamSubscription<Event> subscription,
+    String refPath,
+    Function(dynamic) onUpdate}) {
   if (subscription == null) {
-    final DatabaseReference targetRef = refPath.isNotEmpty ? ref.child(refPath) : ref;
+    final DatabaseReference targetRef =
+        refPath.isNotEmpty ? ref.child(refPath) : ref;
     targetRef.keepSynced(true);
     subscription = targetRef.onValue.listen((Event event) {
       print("subscription: ${event.snapshot.value}");
@@ -263,15 +308,20 @@ void cancelSubscription(StreamSubscription<Event> subscription) {
   subscription.cancel();
 }
 
-Future<void> updateDatabaseState({ DatabaseReference ref, String childPath,
-    Function(dynamic) mutate, Function(dynamic) callback }) async {
-  final DatabaseReference targetRef = childPath.isNotEmpty ? ref.child(childPath) : ref;
+Future<void> updateDatabaseState(
+    {DatabaseReference ref,
+    String childPath,
+    Function(dynamic) mutate,
+    Function(dynamic) callback}) async {
+  final DatabaseReference targetRef =
+      childPath.isNotEmpty ? ref.child(childPath) : ref;
   final TransactionResult transactionResult =
-  await targetRef.runTransaction((MutableData mutableData) async {
+      await targetRef.runTransaction((MutableData mutableData) async {
     mutableData.value = mutate(mutableData.value);
+
     return mutableData;
   });
-
+  print(transactionResult);
   if (transactionResult.committed) {
     if (callback != null) {
       callback(transactionResult.dataSnapshot.value);
