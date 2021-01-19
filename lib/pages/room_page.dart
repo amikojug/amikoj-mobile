@@ -21,8 +21,14 @@ import 'package:amikoj/app.dart';
 import 'package:redux/redux.dart';
 import 'package:shimmer/shimmer.dart';
 
-class RoomPage extends StatelessWidget {
+class RoomPage extends StatefulWidget {
+  @override
+  _RoomPage createState() => _RoomPage();
+}
+
+class _RoomPage extends State<RoomPage> {
   final AuthService _auth = AuthService();
+  String error = '';
 
   void _createOrJoinRoom(BuildContext context) {
     Map<String, dynamic> routeArgs = ModalRoute.of(context).settings.arguments;
@@ -68,7 +74,18 @@ class RoomPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           Spacer(
-                            flex: 2,
+                            flex: 1,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              error,
+                              style: TextStyle(
+                                fontSize: _width * 0.05,
+                                fontWeight: FontWeight.w500,
+                                // color: Colors.red,
+                              ),
+                            ),
                           ),
                           Expanded(
                             flex: 6,
@@ -87,8 +104,7 @@ class RoomPage extends StatelessWidget {
                                               border: Border.all(
                                                   color: Colors.white,
                                                   width: 4),
-                                              color: Color(0xAA000000)
-                                          ),
+                                              color: Color(0xAA000000)),
                                           child: Column(
                                             children: <Widget>[
                                               Row(
@@ -129,7 +145,7 @@ class RoomPage extends StatelessWidget {
                                   valid: true,
                                   redirect: "/home",
                                   action: () async {
-                                    removeYourselfFromRoom();
+                                    await removeYourselfFromRoom();
                                     StoreProvider.of<AppState>(context)
                                         .dispatch(ResetRoom());
                                   },
@@ -157,7 +173,21 @@ class RoomPage extends StatelessWidget {
         child: PillButton(
           "Start",
           action: () async {
-            await sendRedirectToRoundPage(ctx);
+            print('click');
+            dynamic playersWithoutHost = [...roomState.players]
+                .where((item) => item.uid != roomState.hostId);
+            bool allReady = [...playersWithoutHost].every((item) => item.isReady);
+            print(allReady);
+            if (allReady) {
+              setState(() {
+                error = '';
+              });
+              sendRedirectToRoundPage(ctx);
+            } else {
+              setState(() {
+                error = 'Not every player is ready';
+              });
+            }
           },
         ),
       );
