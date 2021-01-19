@@ -176,16 +176,23 @@ class _RoomPage extends State<RoomPage> {
             print('click');
             dynamic playersWithoutHost = [...roomState.players]
                 .where((item) => item.uid != roomState.hostId);
-            bool allReady = [...playersWithoutHost].every((item) => item.isReady);
+            bool allReady =
+                [...playersWithoutHost].every((item) => item.isReady);
             print(allReady);
-            if (allReady) {
-              setState(() {
-                error = '';
-              });
-              sendRedirectToRoundPage(ctx);
+            if ([...roomState.players].length >= 2) {
+              if (allReady) {
+                setState(() {
+                  error = '';
+                });
+                sendRedirectToRoundPage(ctx);
+              } else {
+                setState(() {
+                  error = 'Not every player is ready';
+                });
+              }
             } else {
               setState(() {
-                error = 'Not every player is ready';
+                error = 'You need more players';
               });
             }
           },
