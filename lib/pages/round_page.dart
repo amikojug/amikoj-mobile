@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:amikoj/components/app_bar.dart';
@@ -65,9 +64,30 @@ class _RoundPageState extends State<RoundPage> {
                               children: <Widget>[
                                 Expanded(
                                   flex: 4,
-                                  child: CountDownTimer(size: (_height * 0.13).toInt(), onFinish: () {
-                                     updateAnswerAfterTimesUp(context);
-                                  }, timerController: timerController,),
+                                  child: CountDownTimer(
+                                    size: (_height * 0.13).toInt(),
+                                    onFinish: () {
+                                      updateAnswerAfterTimesUp(context);
+                                    },
+                                    timerController: timerController,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    state.roomState.askedPlayer !=
+                                            _auth.getCurrentUser().uid
+                                        ? 'Question about ' +
+                                            getPlayerName(
+                                                state.roomState.askedPlayer,
+                                                state.roomState)
+                                        : '',
+                                    style: TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.w800,
+                                      color: Colors.black,
+                                    ),
+                                  ),
                                 ),
                                 Expanded(
                                     flex: 10,
@@ -117,14 +137,15 @@ class _RoundPageState extends State<RoundPage> {
                                                     child: Padding(
                                                       padding: const EdgeInsets
                                                               .symmetric(
-                                                          vertical: 10),
+                                                          vertical: 20.0,
+                                                          horizontal: 15.0),
                                                       child: Text(
                                                         getQuestions()[
                                                                 getQuestionNumber(
                                                                     state
                                                                         .roomState)]
                                                             ['question'],
-                                                        style: smallWhiteText,
+                                                        style: whiteText,
                                                         textAlign:
                                                             TextAlign.center,
                                                       ),
@@ -138,11 +159,15 @@ class _RoundPageState extends State<RoundPage> {
                                                 height: 0,
                                               ),
                                               Expanded(
-                                                child: ListView(
-                                                    children: getAnswerCards(
-                                                        context,
-                                                        state.userState,
-                                                        state.roomState)),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: ListView(
+                                                      children: getAnswerCards(
+                                                          context,
+                                                          state.userState,
+                                                          state.roomState)),
+                                                ),
                                               )
                                             ],
                                           )),
@@ -160,10 +185,16 @@ class _RoundPageState extends State<RoundPage> {
         });
   }
 
+  String getPlayerName(String id, RoomState roomState) {
+    return roomState.players.where((player) => player.uid == id).first.name;
+  }
+
   void updateAnswerAfterTimesUp(BuildContext context) {
-    List<UserModule> players = StoreProvider.of<AppState>(context).state.roomState.players;
+    List<UserModule> players =
+        StoreProvider.of<AppState>(context).state.roomState.players;
     var userId = _auth.getCurrentUser().uid;
-    dynamic selectedAnswer = players.where((element) => element.uid == userId).first.selectedAnswer;
+    dynamic selectedAnswer =
+        players.where((element) => element.uid == userId).first.selectedAnswer;
     if (selectedAnswer == null) {
       StoreProvider.of<AppState>(context)
           .dispatch(UpdateUserSelectedAnswer(selectedAnswer: 'NONE'));
