@@ -50,6 +50,10 @@ Future sendResetTimer(BuildContext ctx) async {
   await sendCommand(cmd, ctx);
 }
 
+bool isRoomRefNull() {
+  return _roomSubscription == null;
+}
+
 Future increaseScore(List<UserModule> players, BuildContext ctx) async {
   Store<AppState> s = getStore();
   String roomId = s.state.roomState.roomName;
@@ -104,15 +108,15 @@ Future sendCommand(dynamic command, BuildContext ctx) async {
 }
 
 Future changeQuestion(BuildContext ctx) async {
+  print('changeQuestion1');
   Store<AppState> s = getStore();
   String roomId = s.state.roomState.roomName;
   if (roomId == null) {
     return;
   }
+  print('changeQuestion2');
   updateRoom(roomId, (val) {
-    var rng = new Random();
     List<dynamic> players = List<dynamic>.of(val['players']);
-    // var randomPlayer = rng.nextInt(players.length);
     var player = getNextPlayer();
     var question = getNextQuestion();
     players.forEach((player) {
@@ -304,13 +308,15 @@ void createRoomSubscription(String roomName, BuildContext context) {
       ref: _roomRef,
       subscription: _roomSubscription,
       onUpdate: (value) {
-        Map<String, dynamic> room = Map<String, dynamic>.from(value);
-        StoreProvider.of<AppState>(context).dispatch(UpdateRoom(
-            players: usersFromJson(room, context),
-            roomName: roomName,
-            hostId: room['hostId'],
-            currentQuestionId: room['currentQuestionId'].toString(),
-            askedPlayer: room['askedPlayer']));
+        if (value != null) {
+          Map<String, dynamic> room = Map<String, dynamic>.from(value);
+          StoreProvider.of<AppState>(context).dispatch(UpdateRoom(
+              players: usersFromJson(room, context),
+              roomName: roomName,
+              hostId: room['hostId'],
+              currentQuestionId: room['currentQuestionId'].toString(),
+              askedPlayer: room['askedPlayer']));
+        }
         print('KKKKKK $value');
       });
 }

@@ -180,7 +180,8 @@ class _RoundPageState extends State<RoundPage> {
   }
 
   String getPlayerName(String id, RoomState roomState) {
-    return roomState.players.where((player) => player.uid == id).first.name;
+    return roomState.players.where((player) => player.uid == id).isNotEmpty ?
+    roomState.players.where((player) => player.uid == id).first.name : '';
   }
 
   String getTextAboutAskedPlayer() {
