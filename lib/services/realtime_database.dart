@@ -193,6 +193,8 @@ Future removeYourselfFromRoom() async {
 Future addYourselfToTheRoom(String roomId) async {
   UserModule currentUser = _auth.getCurrentUser();
   Store<AppState> s = getStore();
+  var state = {...s.state.userState.toJson()};
+  state["isReady"] = false;
   await updateRoom(roomId, (val) {
     if (val != null) {
       dynamic players = val["players"] == null ? [] : val["players"];
@@ -203,7 +205,7 @@ Future addYourselfToTheRoom(String roomId) async {
           ...val,
           "players": [
             ...players,
-            {...s.state.userState.toJson()}
+            state,
           ]
         };
         return data;
