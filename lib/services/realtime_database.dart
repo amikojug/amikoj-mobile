@@ -152,12 +152,16 @@ int getNextQuestion() {
   Store<AppState> s = getStore();
   RoomState roomState = s.state.roomState;
   List players = roomState.players;
+  var rng = new Random();
+  var numberOfQuestions = getQuestions().length;
   int index =
       players.indexWhere((element) => element.uid == roomState.askedPlayer);
-  if (index == getQuestions().length - 1 || index == -1) {
+  if (index == -1) {
+    return rng.nextInt(numberOfQuestions);
+  } else if (int.parse(roomState.currentQuestionId) == numberOfQuestions - 1) {
     return 0;
   } else {
-    return index + 1;
+    return int.parse(roomState.currentQuestionId) + 1;
   }
 }
 
