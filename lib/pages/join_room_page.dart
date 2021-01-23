@@ -1,10 +1,14 @@
+import 'package:amikoj/app.dart';
 import 'package:amikoj/components/app_bar.dart';
 import 'package:amikoj/components/pill_input.dart';
 import 'package:amikoj/constants/room_action_type.dart';
+import 'package:amikoj/redux/app_state.dart';
+import 'package:amikoj/services/auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:redux/redux.dart';
 
 import 'package:amikoj/components/pill_button.dart';
 
@@ -17,6 +21,7 @@ class JoinRoomPage extends StatefulWidget {
 
 class _JoinRoomPageState extends State<JoinRoomPage> {
   final roomIdTextController = TextEditingController();
+  Store<AppState> s = getStore();
 
   String roomId = "";
   String error = '';
@@ -36,12 +41,14 @@ class _JoinRoomPageState extends State<JoinRoomPage> {
 
   void valid() async {
     List<String> roomsNames = [];
+    String name = s.state.userState.name;
     await getData().then((value) => {
           value.forEach((val) {
             print(val);
             roomsNames.add(val);
           })
         });
+    List<String> playersInRoom = await getPlayers(roomId);
     if (roomId.isEmpty) {
       setState(() {
         isValid = false;
@@ -51,6 +58,11 @@ class _JoinRoomPageState extends State<JoinRoomPage> {
       setState(() {
         isValid = false;
         error = "This room don't exist";
+      });
+    } else if (playersInRoom.contains(name)) {
+      setState(() {
+        isValid = false;
+        error = "This room already contains a player with the same name";
       });
     } else {
       setState(() {
@@ -87,11 +99,17 @@ class _JoinRoomPageState extends State<JoinRoomPage> {
                           Spacer(
                             flex: 3,
                           ),
-                          Text(
-                            error,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: _width * 0.05,
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Text(
+                                error,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: _width * 0.05,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
                           SizedBox(height: _height * 0.03),
@@ -140,5 +158,22 @@ class _JoinRoomPageState extends State<JoinRoomPage> {
     });
 
     return roomsNames;
+  }
+
+  Future getPlayers(roomName) async {
+    List<String> playersInRoom = [];
+
+    final databaseReference = FirebaseDatabase.instance
+        .reference()
+        .child('rooms')
+        .child(roomName)
+        .child('players');
+
+    await databaseReference.once().then((DataSnapshot snapshot) {
+      if (snapshot.value != null)
+        snapshot.value.forEach((item) => playersInRoom.add(item['name']));
+    });
+
+    return playersInRoom;
   }
 }
