@@ -42,7 +42,12 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
             roomsNames.add(val);
           })
         });
-    if (roomsNames.contains(roomName)) {
+    if (roomName.length > 20) {
+      setState(() {
+        isValid = false;
+        error = 'Room name is too long';
+      });
+    } else if (roomsNames.contains(roomName)) {
       setState(() {
         isValid = false;
         error = 'This room already exist';

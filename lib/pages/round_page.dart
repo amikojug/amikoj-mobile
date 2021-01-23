@@ -75,13 +75,7 @@ class _RoundPageState extends State<RoundPage> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                    state.roomState.askedPlayer !=
-                                            _auth.getCurrentUser().uid
-                                        ? 'Question about ' +
-                                            getPlayerName(
-                                                state.roomState.askedPlayer,
-                                                state.roomState)
-                                        : '',
+                                    getTextAboutAskedPlayer(),
                                     style: TextStyle(
                                       fontSize: 20.0,
                                       fontWeight: FontWeight.w800,
@@ -159,15 +153,15 @@ class _RoundPageState extends State<RoundPage> {
                                                 height: 0,
                                               ),
                                               Expanded(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: ListView(
-                                                      children: getAnswerCards(
-                                                          context,
-                                                          state.userState,
-                                                          state.roomState)),
-                                                ),
+                                                // child: Padding(
+                                                //   padding:
+                                                //       const EdgeInsets.all(8.0),
+                                                child: ListView(
+                                                    children: getAnswerCards(
+                                                        context,
+                                                        state.userState,
+                                                        state.roomState)),
+                                                // ),
                                               )
                                             ],
                                           )),
@@ -186,7 +180,18 @@ class _RoundPageState extends State<RoundPage> {
   }
 
   String getPlayerName(String id, RoomState roomState) {
-    return roomState.players.where((player) => player.uid == id).first.name;
+    return roomState.players.where((player) => player.uid == id).isNotEmpty ?
+    roomState.players.where((player) => player.uid == id).first.name : '';
+  }
+
+  String getTextAboutAskedPlayer() {
+    RoomState roomState = StoreProvider.of<AppState>(context).state.roomState;
+    if (roomState.askedPlayer != _auth.getCurrentUser().uid) {
+      return 'Question about ' +
+          getPlayerName(roomState.askedPlayer, roomState);
+    } else {
+      return '';
+    }
   }
 
   void updateAnswerAfterTimesUp(BuildContext context) {

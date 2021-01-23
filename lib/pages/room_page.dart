@@ -20,20 +20,26 @@ import 'package:amikoj/services/auth.dart';
 import 'package:amikoj/app.dart';
 import 'package:redux/redux.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:widget_did_build/widget_did_build.dart';
 
 class RoomPage extends StatefulWidget {
   @override
   _RoomPage createState() => _RoomPage();
 }
 
-class _RoomPage extends State<RoomPage> {
+class _RoomPage extends State<RoomPage> with DidBuild {
   final AuthService _auth = AuthService();
   String error = '';
 
-  void _createOrJoinRoom(BuildContext context) {
+  @override
+  void didBuild(BuildContext context) {
+    _createRoomSubscription(context);
+  }
+
+  Future _createOrJoinRoom(BuildContext context) async {
     Map<String, dynamic> routeArgs = ModalRoute.of(context).settings.arguments;
     if (routeArgs["type"] == RoomAction.create) {
-      initRoom(routeArgs["roomName"]);
+      await initRoom(routeArgs["roomName"]);
       changeQuestion(context);
     } else if (routeArgs["type"] == RoomAction.join) {
       addYourselfToTheRoom(routeArgs["roomName"]);
@@ -42,16 +48,17 @@ class _RoomPage extends State<RoomPage> {
   }
 
   void _createRoomSubscription(BuildContext context) {
-    Map<String, dynamic> routeArgs = ModalRoute.of(context).settings.arguments;
-    print(routeArgs);
-    String roomName = routeArgs["roomName"];
-    createRoomSubscription(roomName, context);
-    _createOrJoinRoom(context);
+    if (isRoomRefNull()) {
+      Map<String, dynamic> routeArgs = ModalRoute.of(context).settings.arguments;
+      print(routeArgs);
+      String roomName = routeArgs["roomName"];
+      createRoomSubscription(roomName, context);
+      _createOrJoinRoom(context);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    _createRoomSubscription(context);
     double _width = MediaQuery.of(context).size.width;
     double _height = MediaQuery.of(context).size.height;
     return StoreConnector<AppState, RoomState>(
