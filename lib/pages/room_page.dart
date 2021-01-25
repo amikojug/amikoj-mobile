@@ -7,6 +7,7 @@ import 'package:amikoj/redux/app_state.dart';
 import 'package:amikoj/redux/room_reducer.dart';
 import 'package:amikoj/redux/room_state.dart';
 import 'package:amikoj/redux/user_reducer.dart';
+import 'package:amikoj/services/commandExecutor.dart';
 import 'package:amikoj/services/realtime_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -33,7 +34,12 @@ class _RoomPage extends State<RoomPage> with DidBuild {
 
   @override
   void didBuild(BuildContext context) {
-    _createRoomSubscription(context);
+    Map<String, dynamic> routeArgs = ModalRoute.of(context).settings.arguments;
+    if (routeArgs["type"] != RoomAction.rejoin) {
+      _createRoomSubscription(context);
+    } else {
+      showScoreTable(context);
+    }
   }
 
   Future _createOrJoinRoom(BuildContext context) async {

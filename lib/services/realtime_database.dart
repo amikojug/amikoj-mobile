@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'dart:math';
 import 'package:amikoj/app.dart';
 import 'package:amikoj/constants/constants.dart';
+import 'package:amikoj/constants/room_action_type.dart';
 import 'package:amikoj/models/user_module.dart';
 import 'package:amikoj/redux/app_state.dart';
 import 'package:amikoj/redux/room_reducer.dart';
@@ -32,10 +33,31 @@ Future sendRedirectToRoundPage(BuildContext ctx) async {
   await sendCommand(cmd, ctx);
 }
 
+Future sendRedirectToRoomPage(BuildContext ctx, String roomId) async {
+  dynamic cmd = {
+    'command': REDIRECT,
+    'value': '/room',
+    'meta': {
+      "type": RoomAction.rejoin.toString(),
+      "roomName": roomId
+    },
+  };
+  await sendCommand(cmd, ctx);
+}
+
 Future sendShowScoreTable(BuildContext ctx) async {
   dynamic cmd = {
     'command': SHOW_SCORE_TABLE,
     'value': null,
+    'meta': null,
+  };
+  await sendCommand(cmd, ctx);
+}
+
+Future sendShowCorrectDialog(BuildContext ctx, String players) async {
+  dynamic cmd = {
+    'command': SHOW_CORRECT_DIALOG,
+    'value': players,
     'meta': null,
   };
   await sendCommand(cmd, ctx);
@@ -79,9 +101,20 @@ Future increaseScore(List<UserModule> players, BuildContext ctx) async {
 Future sendIncrease(List<UserModule> players, BuildContext ctx) async {
   String hostId = StoreProvider.of<AppState>(ctx).state.roomState.hostId;
   String userId = _auth.getCurrentUser().uid;
+  String askedPlayer = StoreProvider.of<AppState>(ctx).state.roomState.askedPlayer;
+  String playersIds = players.map((e) => e.uid).join(",");
+  playersIds += '[$askedPlayer]';
+  print("String playersIds123");
+  print(playersIds);
+  print(StoreProvider.of<AppState>(ctx).state.roomState.totalQuestions);
   if (hostId == userId) {
     await increaseScore(players, ctx);
-    await sendShowScoreTable(ctx);
+    int totalQuestions = StoreProvider.of<AppState>(ctx).state.roomState.totalQuestions;
+    if (totalQuestions % 6 == 0 && totalQuestions > 0) {
+      await sendRedirectToRoomPage(ctx, StoreProvider.of<AppState>(ctx).state.roomState.roomName);
+    } else {
+      await sendShowCorrectDialog(ctx, playersIds);
+    }
     await changeQuestion(ctx);
   }
 }
@@ -114,7 +147,6 @@ Future changeQuestion(BuildContext ctx) async {
   if (roomId == null) {
     return;
   }
-  print('changeQuestion2');
   updateRoom(roomId, (val) {
     List<dynamic> players = List<dynamic>.of(val['players']);
     var player = getNextPlayer();
@@ -321,7 +353,9 @@ void createRoomSubscription(String roomName, BuildContext context) {
               roomName: roomName,
               hostId: room['hostId'],
               currentQuestionId: room['currentQuestionId'].toString(),
-              askedPlayer: room['askedPlayer']));
+              askedPlayer: room['askedPlayer'],
+              totalQuestions: room['totalQuestions']
+          ));
         }
         print('KKKKKK $value');
       });
