@@ -57,7 +57,7 @@ class PlayerGrid extends StatelessWidget {
               ),
             ),
             Text(player.name, style: whiteText),
-            !isHost
+            false //TODO !isHost fix baning players
                 ? IconButton(
                     icon: FaIcon(
                       FontAwesomeIcons.times,

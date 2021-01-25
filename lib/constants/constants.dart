@@ -12,6 +12,18 @@ const TextStyle whiteText = const TextStyle(
   fontWeight: FontWeight.w500,
 );
 
+const TextStyle greenText = const TextStyle(
+  fontSize: 20.0,
+  color: Colors.green,
+  fontWeight: FontWeight.w500,
+);
+
+const TextStyle redText = const TextStyle(
+  fontSize: 20.0,
+  color: Colors.red,
+  fontWeight: FontWeight.w500,
+);
+
 const TextStyle smallWhiteText = const TextStyle(
   fontSize: 13.0,
   color: Colors.white,

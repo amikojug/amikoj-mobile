@@ -1,4 +1,5 @@
 enum RoomAction {
   create,
-  join
+  join,
+  rejoin
 }
