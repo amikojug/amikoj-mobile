@@ -166,6 +166,9 @@ Technologie wykorzystane w projekcie:
 
 
 ## Testy
+Zostały przeprowadzone testy manualne aplikacji, które:
+- nie wykazały błędów
+- określiły zgodność produktu z wymaganiami stwierdzonymi wcześniej
 
 
 
