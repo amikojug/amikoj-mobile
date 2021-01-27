@@ -76,7 +76,7 @@ Technologie wykorzystane w projekcie:
 
 ## Zakres funkcjonalności
 
-# Logowanie i rejestracja
+### Logowanie i rejestracja
 1. Użytkownik może zajerestrować się do aplikacji poprzez podanie:
   - adresu email
   - hasła do konta
@@ -88,14 +88,14 @@ Technologie wykorzystane w projekcie:
   - Facebook
   - Google
 
-# Pasek nawigacji
+### Pasek nawigacji
 1. Na górze ekranu aplikacji znajduje się pasek nawigacyjny z funkcjami:
   - wylogowanie 
   - dostęp do panelu konta
     - zmiana avataru
     - zmiana nazwy użytkownika
 
-# Tworzenie i dołączanie do pokoi
+### Tworzenie i dołączanie do pokoi
 1. Zalogowany użytkownik może utworzyć pokój
   - niezbędne jest nadanie nazwy tworzonemu pokoju według wytycznych
     - nazwa pokoju nie może być dłuższa niż 20 znaków
@@ -108,7 +108,7 @@ Technologie wykorzystane w projekcie:
     - nazwa pokoju będzie poprawna a pokój o takiej nazwie już istnieje
     - w istniejącym pokoju, do którego użytkownik chce dołaczyć nie występuje gracz o takiej samej nazwie użytkownika
 
-# Widok pokoju
+### Widok pokoju
 1. Użytkownik będący hostem może rozpocząć rozgrywkę gdy
   - w pokoju znajduje się więcej niz jeden gracz 
   - wszycy gracze niebędacy hostem zgłoszą gotowość do rozgrywki
@@ -117,7 +117,7 @@ Technologie wykorzystane w projekcie:
 
 3. Gracz będący hostem może usunąć niechcianych graczy z pokoju 
 
-# Rozgrywka
+### Rozgrywka
 1. Rozgrywka polega na przeprowadzeniu 6 rund, w których wyświetlone jest pytania oraz trzy odpowiedzi
 
 2. Gracze podzieleni są na
@@ -134,7 +134,7 @@ Technologie wykorzystane w projekcie:
 3. Po zakończeniu rundy następuje zmiana osoby pytanej oraz zmiana pytania
 
 
-# Zakończenie rozgrywki
+### Zakończenie rozgrywki
 1. Rozgrywka kończy się po zadaniu 6 pytań 
 2. Wyświetlana jest tabela punktowa zawierająca informacje o zdobytych punkatch prez poszczególnych graczy
 
