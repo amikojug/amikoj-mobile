@@ -151,30 +151,14 @@ Projekt został podzielony na poszczególne pakiety:
 3. Aplikacja działa podczas połączenia z Internetem
 
 
-## Diagramy z inżynierii
-
-
-
-### Diagram klas
-
-
-
-### Diagram ERD
-
-
-
-### Diagram przypadków użycia
-
-
-
-### Diagram aktorów
-
+## Diagramy
+Wszystkie diagramy są umieszczone w folderze diagrams na repozytorium, jednak są one nie aktualne ponieważ od momentu projektowania do ukończenia projektu sporo założeń uległo zmianiee.
 
 
 ## Testy
 Zostały przeprowadzone testy manualne aplikacji, które:
 - nie wykazały błędów
-- określiły zgodność produktu z wymaganiami stwierdzonymi wcześniej
+- określiły zgodność podstawowych funkcjonalności produktu z wymaganiami stwierdzonymi wcześniej
 
 
 
