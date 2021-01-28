@@ -71,7 +71,13 @@ Technologie wykorzystane w projekcie:
 
 
 ## Architektura projektu
-
+Projekt został podzielony na poszczególne pakiety:
+- components - elementy stałe, używane wielokrotnie 
+- constanst - paleta kolorów, rozmiary czcionek
+- models - modele (model użytkownika)
+- pages - widoki poszczególnych stron
+- redux - zarządzanie stanem
+- services - usuługi umożliwiające komunikacje z bazą danych
 
 
 ## Zakres funkcjonalności
