@@ -20,12 +20,12 @@
 **Platforma:** Android
 
 Aplikacja mobilna Amikoj pozwala na przeprowadzenie wspólnej rozgrywki umożliwiającej lepsze poznanie siebie oraz swoich znajomych poprzez odpowiadanie na ciekawe pytania.
-Gracze po utworzeniu oraz dołączeniu do pokoju rozpoczynają rozgrywkę polegającą na rozegraniu kilku rund starając się zdobyć jak najwyższą liczbę puntów.
+Gracze po utworzeniu oraz dołączeniu do pokoju rozpoczynają rozgrywkę polegającą na rozegraniu kilku rund starając się zdobyć jak najwyższą liczbę punktów.
 W pojedynczej rundzie wyznaczyć można dwie grupy graczy:
 - gracz pytany (jedna osoba),
 - gracze odpowiadający (pozostałe osoby).
 
-Dla obu wspomnianych grup wyświetlane jest to samo pytanie oraz 3 odpowiedzi. Zadaniem osoby pytanej jest wybranie jednej z trzech odpowiedzi - tej która najbardziej pasuje do osoby pytanej. Natomiast zadaniem innych graczy jest próba odgadnięcia wyboru osoby pytanej. Punkty zdobywają gracze, którzy poprawnie wytypowali odpowiedź jakiej udzieliła osoba pytana. Gracz, który najlepiej poznał swoich znajmowych (zdobył najwięcej punktów), zostaje zwycięzcą.
+Dla obu wspomnianych grup wyświetlane jest to samo pytanie oraz 3 odpowiedzi. Zadaniem osoby pytanej jest wybranie jednej z trzech odpowiedzi - tej która najbardziej pasuje do osoby pytanej. Natomiast zadaniem innych graczy jest próba odgadnięcia wyboru osoby pytanej. Punkty zdobywają gracze, którzy poprawnie wytypowali odpowiedź jakiej udzieliła osoba pytana. Gracz, który najlepiej poznał swoich znajomych (zdobył najwięcej punktów), zostaje zwycięzcą.
 
 
 ## Podział pracy
@@ -77,13 +77,13 @@ Projekt został podzielony na poszczególne pakiety:
 - models - modele (model użytkownika)
 - pages - widoki poszczególnych stron
 - redux - zarządzanie stanem
-- services - usuługi umożliwiające komunikacje z bazą danych
+- services - usługi umożliwiające komunikacje z bazą danych
 
 
 ## Zakres funkcjonalności
 
 ### Logowanie i rejestracja
-1. Użytkownik może zajerestrować się do aplikacji poprzez podanie:
+1. Użytkownik może zarejestrować się do aplikacji poprzez podanie:
   - adresu email
   - hasła do konta
     - wymagane powtórzenie hasła w celu weryfikacji zgodności obu podanych haseł
@@ -106,18 +106,18 @@ Projekt został podzielony na poszczególne pakiety:
   - niezbędne jest nadanie nazwy tworzonemu pokoju według wytycznych
     - nazwa pokoju nie może być dłuższa niż 20 znaków
     - nazwa pokoju nie może być pusta
-    - nazwa pokoju musi być rózna od nazw pokojów już istniejących
+    - nazwa pokoju musi być różna od nazw pokojów już istniejących
   - gracz tworzący pokój staje się hostem
   
 2. Zalogowany użytkownik może dołączyć do istniejącego pokoju
   - niezbędne jest wpisanie nazwy pokoju a użytkownik dołączy do pokoju gdy
     - nazwa pokoju będzie poprawna a pokój o takiej nazwie już istnieje
-    - w istniejącym pokoju, do którego użytkownik chce dołaczyć nie występuje gracz o takiej samej nazwie użytkownika
+    - w istniejącym pokoju, do którego użytkownik chce dołączyć nie występuje gracz o takiej samej nazwie użytkownika
 
 ### Widok pokoju
 1. Użytkownik będący hostem może rozpocząć rozgrywkę gdy
-  - w pokoju znajduje się więcej niz jeden gracz 
-  - wszycy gracze niebędacy hostem zgłoszą gotowość do rozgrywki
+  - w pokoju znajduje się więcej niż jeden gracz 
+  - wszyscy gracze niebędący hostem zgłoszą gotowość do rozgrywki
 
 2. Użytkownik dołączający do pokoju może zgłosić gotowość do rozgrywki 
 
@@ -127,12 +127,12 @@ Projekt został podzielony na poszczególne pakiety:
 1. Rozgrywka polega na przeprowadzeniu 6 rund, w których wyświetlone jest pytania oraz trzy odpowiedzi
 
 2. Gracze podzieleni są na
-  - osobę pytaną - jednen gracz 
+  - osobę pytaną - jeden gracz 
     - gracz będący osobą pytaną informowany jest o tym poprzez zmianę koloru obramowania pola z pytaniem na kolor żółty 
     - zadaniem osoby pytanej jest udzielenie szczerej odpowiedzi na pytanie według własnych przekonań
     - po udzieleniu odpowiedzi gracz pytany dostaje informacje o udzieleniu odpowiedzi
   - osoby odpowiadające - pozostali gracz
-    - gracze będący osobami odpowiadającymi informowani są o kim jest aktulane pytanie poprzez wyświetlaną informacje
+    - gracze będący osobami odpowiadającymi informowani są o kim jest aktualne pytanie poprzez wyświetlaną informacje
     - zadaniem osób odpowiadających jest próba wytypowania odpowiedzi jakiej udzieliła osoba pytana
     - obramowanie pola z pytaniem u graczy odpowiadających pozostaje białe
     - po udzieleniu odpowiedzi przez gracza odpowiadającego zostaje wyświetlona informacja o poprawności odpowiedzi
@@ -142,7 +142,7 @@ Projekt został podzielony na poszczególne pakiety:
 
 ### Zakończenie rozgrywki
 1. Rozgrywka kończy się po zadaniu 6 pytań 
-2. Wyświetlana jest tabela punktowa zawierająca informacje o zdobytych punkatch prez poszczególnych graczy
+2. Wyświetlana jest tabela punktowa zawierająca informacje o zdobytych punktach prze poszczególnych graczy
 
 
 ## Wymogi techniczne
